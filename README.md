@@ -7,4 +7,4 @@ Specifications:
 
 
 to play the game, use this link: https://kitao.github.io/pyxel/wasm/launcher/?run=samuel-minonne.NSI_Project.main 
-</br>(not working)
+</br>
