@@ -6,18 +6,26 @@ make a retro type game in python using pyxel
 Specifications:</br>
 
 Boss:</br>
-    - baby zombie</br>
+    - baby zombie (hidden)</br>
+    - lich</br>
 
 Small Nemessis:</br>
-               - lich</br>
                - zombie (big)</br>
                
  Main caracter:</br>
-              - Super man men 
-              - the wierd cat 
+              - Super man men</br>
+              - the wierd cat </br>
+      Caracter's actions:</br>
+                         - jump (the more you hold the higher you jump) and double jump</br>
+                         - can be controled mid air ( but can't jump)</br>
+                         - attacks up right left down</br>
+                         - walk (maybe run)</br>
+                         
+                         
+      
               
  Movment:</br>
-        - imput keybord (zqsd)
+        - imput keybord (zqsd)</br>
              
         
 
