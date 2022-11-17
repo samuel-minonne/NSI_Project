@@ -6,5 +6,5 @@ make a retro type game in python using pyxel
 Specifications:
 
 
-to play the game, use this link: https://kitao.github.io/pyxel/wasm/launcher/?run=samuel-minonne.NSI_Project.main.main 
+to play the game, use this link: https://kitao.github.io/pyxel/wasm/launcher/?run=samuel-minonne.NSI_Project.main 
 </br>(not working)
