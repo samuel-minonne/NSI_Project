@@ -1,5 +1,6 @@
 # NSI_Project
 
-on sait toujours pas koikonfé
+Objective:</br>
+make a retro type game in python using pyxel
 
-mais on le fait quand meme
+Specifications:
