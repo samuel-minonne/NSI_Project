@@ -20,11 +20,71 @@ class Hitbox:
         testbox.bottom = 16
         testbox.left = 4
         testbox.right = 12
+        
+        >>>testbox = Hitbox(2.0,6.4,9.8,5.2)
+        testbox.xpos = 2.0
+        testbox.ypos = 6.4
+        testbox.length = 9.8
+        testbox.height = 5.2
+        testbox.top = 6.4
+        testbox.bottom = 11.6
+        testbox.left = 2.0
+        testbox.right = 11.8
+        
+        >>>testbox = Hitbox(-1,-4,8,16)
+        testbox.xpos = -1
+        testbox.ypos = -4
+        testbox.length = 8
+        testbox.height = 16
+        testbox.top = -4
+        testbox.bottom = 12
+        testbox.left = -1
+        testbox.right = 7
+        
+        >>>testbox = Hitbox(-1.0,-4.,8.,16.)
+        testbox.xpos = -1.0
+        testbox.ypos = -4.0
+        testbox.length = 8.0
+        testbox.height = 16.0
+        testbox.top = -4.0
+        testbox.bottom = 12.
+        testbox.left = -1.0
+        testbox.right = 7.0
+        
+        >>>testbox = Hitbox(-1,-4,-8,16)
+        AssertionError: l must be > 0
+        
+        >>>testbox = Hitbox(-1,-4,8,-16)
+        AssertionError: h must be > 0
+        
+        >>>testbox = Hitbox(2.0,6.4,9.8,5.2)
+        testbox.xpos = 2.0
+        testbox.ypos = 6.4
+        testbox.length = 9.8
+        testbox.height = 5.2
+        testbox.top = 6.4
+        testbox.bottom = 11.6
+        testbox.left = 2.0
+        testbox.right = 11.8
+        
+        >>>testbox = Hitbox('6',6,12,2)
+        AssertionError: x must be a number
+        
+        >>>testbox = Hitbox(6,'6',12,2)
+        AssertionError : y must be a number
+        
+        >>>testbox = Hitbox(6,6,'12',2)
+        AssertionError: l must be a number
+        
+        >>>testbox = Hitbox(6,6,12,'2')
+        AssertionError : h must be a number
         """
         assert type(x) = int or type(x) = float, "x must be a number"
         assert type(y) = int or type(y) = float, "y must be a number"
         assert type(l) = int or type(l) = float, "l must be a number"
         assert type(h) = int or type(h) = float, "h must be a number"
+        assert l > 0,"l must be > 0"
+        assert h > 0,"h must be > 0"
         
         self.xpos = x
         self.ypos = y
