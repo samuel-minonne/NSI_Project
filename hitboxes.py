@@ -79,10 +79,10 @@ class Hitbox:
         >>>testbox = Hitbox(6,6,12,'2')
         AssertionError : h must be a number
         """
-        assert type(x) = int or type(x) = float, "x must be a number"
-        assert type(y) = int or type(y) = float, "y must be a number"
-        assert type(l) = int or type(l) = float, "l must be a number"
-        assert type(h) = int or type(h) = float, "h must be a number"
+        assert type(x) == int or type(x) == float, "x must be a number"
+        assert type(y) == int or type(y) == float, "y must be a number"
+        assert type(l) == int or type(l) == float, "l must be a number"
+        assert type(h) == int or type(h) =                    = float, "h must be a number"
         assert l > 0,"l must be > 0"
         assert h > 0,"h must be > 0"
         
@@ -95,8 +95,75 @@ class Hitbox:
         self.left = self.xpos
         self.right = self.xpos + self.length
         
-    def moveTo(self,x:int,y:int):
-        """Moves the hitbox to the specified coordinates"""
+    def moveTo(self,x,y):
+        """Moves the hitbox to the specified coordinates
+        
+        >>>testbox = Hitbox(0,4,8,16)
+        >>>testbox.moveTo(1,5)
+        testbox.xpos = 1
+        testbox.ypos = 5
+        testbox.top = 5
+        testbox.bottom = 21
+        testbox.left = 1
+        testbox.right = 9
+        
+        >>>testbox = Hitbox(0.0,4.0,8.0,16.0)
+        >>>testbox.moveTo(1.0,5.0)
+        testbox.xpos = 1.0
+        testbox.ypos = 5.0
+        testbox.top = 5.0
+        testbox.bottom = 21.0
+        testbox.left = 1.0
+        testbox.right = 9.0
+        
+        >>>testbox = Hitbox(0,-4,8,16)
+        >>>testbox.moveTo(1,-3)
+        testbox.xpos = 1
+        testbox.ypos = -3
+        testbox.top = -3
+        testbox.bottom = 13 
+        testbox.left = 1
+        testbox.right = 9
+        
+        >>>testbox = Hitbox(-2,4,8,16)
+        >>>testbox.moveTo(-1,5)
+        testbox.xpos = -1
+        testbox.ypos = 5
+        testbox.top = 5
+        testbox.bottom = 21
+        testbox.left = -1
+        testbox.right = 7
+        
+        >>>testbox = Hitbox(0.0,-4.0,8.0,16.0)
+        >>>testbox.moveTo(1.0,-3.0)
+        testbox.xpos = 1.0
+        testbox.ypos = -3.0
+        testbox.top = -3.0
+        testbox.bottom = 13.0
+        testbox.left = 1.0
+        testbox.right = 9.0
+        
+        >>>testbox = Hitbox(-2.0,4.0,8.0,16.0)
+        >>>testbox.moveTo(-1.0,5.0)
+        testbox.xpos = -1.0
+        testbox.ypos = 5.0
+        testbox.top = 5.0
+        testbox.bottom = 21.0
+        testbox.left = -1.0
+        testbox.right = 7.0
+        
+        >>>testbox = Hitbox(-2.0,4.0,8.0,16.0)
+        >>>testbox.moveTo('-1.0',5.0)
+        AssertionError: x must be a number
+        
+        >>>testbox = Hitbox(-2.0,4.0,8.0,16.0)
+        >>>testbox.moveTo(-1.0,'5.0')
+        AssertionError: y must be a number
+
+        """
+        assert type(x) == int or type(x) == float, "x must be a number"
+        assert type(y) == int or type(y) == float, "y must be a number"
+        
         self.xpos = x
         self.ypos = y
         self.top = self.ypos
