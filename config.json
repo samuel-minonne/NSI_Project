@@ -1,0 +1,13 @@
+{
+    "player":
+    {    
+        "length": 8,
+        "height": 8,
+        "speed_increment": 0.15,
+        "max_speed": 1.0,
+        "ground_drag": 0.2,
+        "gravity": 0.05,
+        "ascending_speed": 0.75,
+        "max_falling_speed": 1.0
+    }
+}
