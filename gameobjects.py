@@ -171,32 +171,74 @@ class Player(Entity):
         self.upgrades = [True,True,True,True,True] #a list of bool
         
         self.is_attacking = False
+        self.can_dash = True
+        self.can_doublejump = True
+        self.dashing = False
+        self.dash_timer = 0
         self.facing_right = facing_right
         self.vertical_direction = 1 #0 is facing up, 1 horizontally and 2 is facing down 
     
     def movement(self):
         """Changes the speed values based on the key imputs"""
-                
-        #movement sur l'axe x
-        if pyxel.btn(pyxel.KEY_Q) and self.xspeed > -self.config["movement"]["max_speed"]:
-            self.xspeed -= self.config["movement"]["speed_increment"]
-        elif self.xspeed < 0: 
-            self.xspeed += self.config["movement"]["ground_drag"]
-            if self.xspeed > 0: #évite de dépasser 0
-                self.xspeed = 0
-        if pyxel.btn(pyxel.KEY_D) and self.xspeed < self.config["movement"]["max_speed"]:
-            self.xspeed += self.config["movement"]["speed_increment"]
-        elif self.xspeed > 0:
-            self.xspeed -= self.config["movement"]["ground_drag"]
-            if self.xspeed < 0: #évite de dépasser 0
-                self.xspeed = 0
-        #movement sur l'axe y
-        if self.yspeed < self.config["movement"]["max_falling_speed"]:
-            self.yspeed += self.config["movement"]["gravity"]
-            if self.yspeed > self.config["movement"]["max_falling_speed"]:#pour éviter de dépasser la max falling speed
-                self.yspeed = self.config["movement"]["max_falling_speed"]
-        if pyxel.btnp(pyxel.KEY_SPACE) and self.touches_down:
-            self.yspeed = -1
+        
+        if pyxel.btn(pyxel.KEY_D) and not pyxel.btn(pyxel.KEY_Q):
+            self.facing_right = True
+        if pyxel.btn(pyxel.KEY_Q) and not pyxel.btn(pyxel.KEY_D):
+            self.facing_right = False
+        
+        self.dash_timer -= 1
+        if self.dash_timer < 0:
+            self.dashing = False
+            
+        if not self.dashing: 
+            if self.touches_down: #resets the dash and doublejump if the player touches the floor
+                self.can_dash = True 
+                self.can_doublejump = True  
+            #movement sur l'axe x
+            if pyxel.btn(pyxel.KEY_Q) and self.xspeed > -self.config["movement"]["max_speed"]:
+                self.xspeed -= self.config["movement"]["speed_increment"]
+            elif self.xspeed < 0: 
+                self.xspeed += self.config["movement"]["ground_drag"]
+                if self.xspeed > 0: #évite de dépasser 0
+                    self.xspeed = 0
+            if pyxel.btn(pyxel.KEY_D) and self.xspeed < self.config["movement"]["max_speed"]:
+                self.xspeed += self.config["movement"]["speed_increment"]
+            elif self.xspeed > 0:
+                self.xspeed -= self.config["movement"]["ground_drag"]
+                if self.xspeed < 0: #évite de dépasser 0
+                    self.xspeed = 0
+            #movement sur l'axe y
+            if self.yspeed < self.config["movement"]["max_falling_speed"]:
+                self.yspeed += self.config["movement"]["gravity"]
+                if self.yspeed > self.config["movement"]["max_falling_speed"]:#pour éviter de dépasser la max falling speed
+                    self.yspeed = self.config["movement"]["max_falling_speed"]
+            
+            #all the types of jumps
+            if pyxel.btn(pyxel.KEY_SPACE) and self.touches_down: #normal jumps
+                self.yspeed = -1   
+            elif self.touches_right and pyxel.btnp(pyxel.KEY_SPACE): #temporary stuff for the walljumps
+                self.yspeed = -1
+                self.xspeed -= 1
+            elif self.touches_left and pyxel.btnp(pyxel.KEY_SPACE): #walls jumps the other way
+                self.yspeed = -1
+                self.xspeed += 1
+            elif pyxel.btnp(pyxel.KEY_SPACE) and self.can_doublejump: #double jumps
+                self.yspeed = -1
+                self.can_doublejump = False
+            
+        if pyxel.btnp(pyxel.MOUSE_BUTTON_RIGHT) and self.can_dash: #temporary stuff for the dash
+            if self.facing_right:
+                self.yspeed = 0
+                self.xspeed = 2
+                self.can_dash = False
+                self.dashing = True
+                self.dash_timer = self.config["movement"]["dash_time"]
+            else:
+                self.yspeed = 0
+                self.xspeed = -2
+                self.can_dash = False
+                self.dashing = True
+                self.dash_timer = self.config["movement"]["dash_time"]
         
     def combat(self):
         """very temporary"""
@@ -208,6 +250,36 @@ class Player(Entity):
             self.attack.moveTo(round(self.xpos+self.length),round(self.ypos))
             if self.attack.timer < 0:
                 self.is_attacking = False
+                
+class Camera():
+    """A class that handles the movement of the camera. xoffset and yoffset are the values by which we offset the drawings on the screen"""
+    def __init__(self,xoffset = 0, yoffset = 0):
+        self.xoffset = xoffset
+        self.yoffset = yoffset
+        
+    def xOnScreen(self,x):
+        """Returns the x coordinate on screen of an actual x coordinate in game"""
+        return x-self.xoffset
+    
+    def yOnScreen(self,y):
+        """Returns the y coordinate on screen of an actual y coordinate in game"""
+        return y-self.yoffset
+    
+    def setCameraX(self,x):
+        """Sets the xoffset to the specified value"""
+        self.xoffset = x
+        
+    def setCameraY(self,y):
+        """Sets the yoffset to the specified value"""
+        self.xoffset = y
+        
+    def focusOn(self,x,y):
+        """Centers the camera on the specified coordinates"""
+        self.xoffset = x - config["game"]["width"]/2
+        self.yoffset = y - config["game"]["height"]/2
+        
+        
+    
     
 if __name__ == "__main__":
     import doctest
