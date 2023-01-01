@@ -1,13 +1,29 @@
 {
+    "game":
+    {
+        "height": 200,
+        "width": 200
+    },
     "player":
     {    
-        "length": 8,
-        "height": 8,
-        "speed_increment": 0.15,
-        "max_speed": 1.0,
-        "ground_drag": 0.2,
-        "gravity": 0.05,
-        "ascending_speed": 0.75,
-        "max_falling_speed": 1.0
+        "movement":
+        {
+            "length": 8,
+            "height": 8,
+            "speed_increment": 0.15,
+            "max_speed": 1.0,
+            "ground_drag": 0.2,
+            "gravity": 0.05,
+            "ascending_speed": 0.75,
+            "max_falling_speed": 1.0,
+            "dash_speed": 2.0,
+            "dash_time": 7
+        },
+        "combat":
+        {
+            "damage": 5,
+            "attack_time": 10,
+            "attack_cooldown": 50
+        }
     }
 }
