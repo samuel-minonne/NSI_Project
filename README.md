@@ -13,26 +13,28 @@ A main character:
 
     
     
-Some upgrades/abilities:
-    -Dash
-    -Walljump
-    -Doublejump
-    -Ranged attack
+Some upgrades/abilities:</br>
+    -Dash</br>
+    -Walljump</br>
+    -Doublejump</br>
+    -Ranged attack</br>
 
-A combat system:
+A combat system:</br>
+</br>
 
-Level loading system:
-    -Takes a list (texture of the room) of lists (rows) of tuples (textures of the objects)
-    -each tuple has 2 ints, one is the number of the texture loaded and the other the rotation
-    -another list for the hitboxes of the walls (a list of list of 4 values, xpos, ypos, length and height of the hitbox
+Level loading system:</br>
+    -Takes a list (texture of the room) of lists (rows) of tuples (textures of the objects)</br>
+    -each tuple has 2 ints, one is the number of the texture loaded and the other the rotation</br>
+    -another list for the hitboxes of the walls (a list of list of 4 values, xpos, ypos, length and height of the hitbox</br>
 
-Some enemies:
-    -basic one that just walks until an edege or a wall and turns around
-    -more complex ones (runs towards/attacks the player on sight)
-    -a flying one?
-    
-Some bosses:
-    -Have to be big and cool and epic and stuff
+Some enemies:</br>
+    -basic one that just walks until an edege or a wall and turns around</br>
+    -more complex ones (runs towards/attacks the player on sight)</br>
+    -a flying one?</br>
+    </br>
+Some bosses:</br>
+    -Have to be big and cool and epic and stuff</br>
+    </br>
 Boss:</br>
     - baby zombie (hidden)</br>
     - lich</br>
