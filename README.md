@@ -11,7 +11,7 @@ A main character:
     - can be controled mid air ( but can't jump)</br>
     - attacks up right left down</br>
 
-    -
+    
     
 Some upgrades/abilities:
     -Dash
