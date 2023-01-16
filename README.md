@@ -12,10 +12,10 @@ Boss:</br>
 Small Nemessis:</br>
                - zombie (big)</br>
                
- Main caracter:</br>
-              - Super man men</br>
+ Main character:</br>
+              - Super man man</br>
               - the wierd cat </br>
-      Caracter's actions:</br>
+      Character's actions:</br>
                          - jump (the more you hold the higher you jump) and double jump</br>
                          - can be controled mid air ( but can't jump)</br>
                          - attacks up right left down</br>
@@ -24,7 +24,7 @@ Small Nemessis:</br>
                          
       
               
- Movment:</br>
+ Movement:</br>
         - imput keybord (zqsd)</br>
              
         
