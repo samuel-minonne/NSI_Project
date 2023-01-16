@@ -13,7 +13,7 @@ A main character:
 
     
     
-<font size="6">Some upgrades/abilities:</font>
+<font size="1000">Some upgrades/abilities:</font>
 - Dash
 - Walljump
 - Doublejump
