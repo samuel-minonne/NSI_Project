@@ -31,6 +31,8 @@ pyxel.init(config["game"]["width"], config["game"]["height"], title="Protoknight
 def update():
     room.player.update()
     room.player.movement()
+    for e in room.enemies_list:
+        e.update()
     camera.focusOn(room.player.xpos+4,room.player.ypos+4)
     
 def draw():
