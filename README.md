@@ -15,11 +15,11 @@ A main character:</br>
     
     
 Some upgrades/abilities:</br>
-- Dash</br>
-- Walljump</br>
-- Doublejump</br>
-- Ranged attack</br>
-- Weapon upgrades</br>
+ - Dash</br>
+ - Walljump</br>
+ - Doublejump</br>
+ - Ranged attack</br>
+ - Weapon upgrades</br>
 </br>
 
 A combat system:</br>
