@@ -37,6 +37,4 @@ https://nuitducode.github.io/DOCUMENTATION/PYTHON/Premiers%20pas%20avec%20Pyxel%
 
 tasks for each person:</br>
 
-Samuel --> module for hitboxes and collisions </br>
-Valentin --> Liste de tuples pour le systeme de textures</br>
-Elisa --> module with every classes for every game object
+
