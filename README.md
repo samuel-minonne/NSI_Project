@@ -66,6 +66,3 @@ useful links:
 https://nuitducode.github.io/DOCUMENTATION/PYTHON/Premiers%20pas%20avec%20Pyxel%20-%20Premi%C3%A8re%20et%20Terminale/Tutoriel-01/
 </br>
 
-tasks for each person:</br>
-
-
