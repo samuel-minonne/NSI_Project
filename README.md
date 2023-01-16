@@ -1,7 +1,14 @@
 # NSI_Project
 
 Objective:</br>
-make a retro type game in python using pyxel
+make a retro type game in python using pyxel</br>
+</br>
+
+Todo list:</br>
+    - Add an isTouchingLeft, isTouchingRight, isTouchingUp,isTouchingDown methods to the hitbox class</br>
+    - Add a is_point_in method to hitbox class</br>
+    - Invent a title</br>
+    </br>
 
 Specifications:</br>
 
@@ -45,17 +52,14 @@ Some bosses:</br>
     </br>
     
     
-Todo list:</br>
-    - Add an isTouchingLeft, isTouchingRight, isTouchingUp,isTouchingDown methods to the hitbox class</br>
-    - Add a is_point_in method to hitbox class</br>
-    </br>
+
     
 
 Random idas:</br>
--zombie (big)</br>
-- baby zombie (hidden)</br>
-- lich</br>
--a cat </br>              
+    - zombie (big)</br>
+    - baby zombie (hidden)</br>
+    - lich</br>
+    - a cat </br>              
 
 to play the game, use this link: https://kitao.github.io/pyxel/wasm/launcher/?run=samuel-minonne.NSI_Project.main 
 
