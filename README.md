@@ -13,11 +13,11 @@ A main character:
 
     
     
-Some upgrades/abilities:</br>
-    -Dash</br>
-    -Walljump</br>
-    -Doublejump</br>
-    -Ranged attack</br>
+Some upgrades/abilities:
+- Dash
+- Walljump
+- Doublejump
+- Ranged attack
 
 A combat system:</br>
 </br>
