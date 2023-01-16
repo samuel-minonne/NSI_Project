@@ -45,6 +45,7 @@ Small Nemessis:</br>
  Main caracter:</br>
               - Super man men</br>
               - the wierd cat </br>
+              </br>
       Caracter's actions:</br>
                          - jump (the more you hold the higher you jump) and double jump</br>
                          - can be controled mid air ( but can't jump)</br>
