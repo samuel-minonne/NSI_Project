@@ -7,7 +7,7 @@ Specifications:</br>
 
 A main character:
     - can walk (maybe run)</br>
-    - can jump (the more you hold the higher you jump)br>
+    - can jump (the more you hold the higher you jump)</br>
     - can be controled mid air ( but can't jump)</br>
     - attacks up right left down</br>
 
