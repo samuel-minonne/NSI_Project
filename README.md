@@ -44,12 +44,17 @@ Some bosses:</br>
     - Have to be big and cool and epic and stuff</br>
     </br>
     
-Boss:</br>
-    - baby zombie (hidden)</br>
-    - lich</br>
+    
+Todo list:</br>
+    - Add an isTouchingLeft, isTouchingRight, isTouchingUp,isTouchingDown methods to the hitbox class</br>
+    - Add a is_point_in method to hitbox class</br>
+    </br>
+    
 
 Random idas:</br>
 -zombie (big)</br>
+- baby zombie (hidden)</br>
+- lich</br>
 -a cat </br>              
 
 to play the game, use this link: https://kitao.github.io/pyxel/wasm/launcher/?run=samuel-minonne.NSI_Project.main 
