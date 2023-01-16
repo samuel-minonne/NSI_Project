@@ -19,6 +19,8 @@ class Room:
         self.walls_hitboxes.append(hitboxes.Hitbox(32,64,8,8))
         self.walls_hitboxes.append(hitboxes.Hitbox(112,16,8,64))
         
+        self.enemies_list = []
+        
         self.player = gameobjects.Player(0,0,self.walls_hitboxes)#The player
         
         
