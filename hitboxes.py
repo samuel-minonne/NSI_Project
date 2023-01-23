@@ -82,7 +82,7 @@ class Hitbox:
         assert type(x) == int or type(x) == float, "x must be a number"
         assert type(y) == int or type(y) == float, "y must be a number"
         assert type(l) == int or type(l) == float, "l must be a number"
-        assert type(h) == int or type(h) =                    = float, "h must be a number"
+        assert type(h) == int or type(h) == float, "h must be a number"
         assert l > 0,"l must be > 0"
         assert h > 0,"h must be > 0"
         
@@ -159,7 +159,6 @@ class Hitbox:
         >>>testbox = Hitbox(-2.0,4.0,8.0,16.0)
         >>>testbox.moveTo(-1.0,'5.0')
         AssertionError: y must be a number
-
         """
         assert type(x) == int or type(x) == float, "x must be a number"
         assert type(y) == int or type(y) == float, "y must be a number"
@@ -194,7 +193,37 @@ def doHitboxesTouch(hitbox1:Hitbox,hitbox2:Hitbox):
         return ['o','o']
     else:
         return ['f','f']
-        
+
+def how_deep_left(hitbox1:Hitbox,hitbox2:Hitbox):
+    """returns 0 if the left side of hitbox1 is touching the right side of hitbox2, 
+    if the side is inside hitbox2 returns the distance between the side and the right side of hitbox2 it returns the distance between the 2 sides
+    returns -1 otherwise"""
+    if  ((hitbox1.bottom>hitbox2.top and hitbox1.bottom<hitbox2.bottom) or (hitbox1.top>hitbox2.top and hitbox1.top<hitbox2.bottom) or (hitbox1.top==hitbox2.top or hitbox1.bottom==hitbox2.bottom)) and hitbox2.right - hitbox1.left >= 0 and hitbox1.left > hitbox2.left:
+        return hitbox2.right - hitbox1.left
+    else:
+        return -1
+
+def how_deep_right(hitbox1:Hitbox,hitbox2:Hitbox):
+    """returns 0 if the right side of hitbox1 is touching the left side of hitbox2, 
+    if the side is inside hitbox2 returns the distance between the side and the left side of hitbox2 it returns the distance between the 2 sides
+    returns -1 otherwise"""
+    if  ((hitbox1.bottom>hitbox2.top and hitbox1.bottom<hitbox2.bottom) or (hitbox1.top>hitbox2.top and hitbox1.top<hitbox2.bottom) or (hitbox1.top==hitbox2.top or hitbox1.bottom==hitbox2.bottom)) and hitbox2.left - hitbox1.right >= 0 and hitbox1.right >= hitbox2.right:
+        return hitbox2.left - hitbox1.right
+    else:
+        return -1
+
+def how_deep_left(hitbox1:Hitbox,hitbox2:Hitbox):
+    """returns 0 if the left side of hitbox1 is touching the right side of hitbox2, 
+    if the side is inside hitbox2 returns the distance between the side and the right side of hitbox2 it returns the distance between the 2 sides
+    returns -1 otherwise"""
+    if  ((hitbox1.bottom>hitbox2.top and hitbox1.bottom<hitbox2.bottom) or (hitbox1.top>hitbox2.top and hitbox1.top<hitbox2.bottom) or (hitbox1.top==hitbox2.top or hitbox1.bottom==hitbox2.bottom)) and hitbox2.right - hitbox1.left >= 0 and hitbox1.left > hitbox2.left:
+        return hitbox2.right - hitbox1.left
+    else:
+        return -1
+
+
+
+
 if __name__ == "__main__":
     import doctest
     doctest.testmod(verbos = True)
