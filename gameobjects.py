@@ -149,16 +149,31 @@ class Entity(Gameobject):
 
 class Attack(hitboxes.Hitbox):
     """An Attack, a child of the Hitbox class with a duration, a damage and a list of entities that have been hit"""
-    def __init__(self, x, y, l, h, dmg, duration:int):
+    def __init__(self, x, y, l, h, dmg, duration:int,xoffset = 0,yoffset = 0):
         super().__init__(x, y, l, h,)
         """Creates an attack"""
         self.dmg = dmg #the dammage dealt by the attack
         self.timer = duration #for how long the attack will stay on screen
         self.entities_hit = [] #all the entites that have been hit by the attack
+        self.xoffset = xoffset
+        self.yoffset = yoffset
         
     def update(self):
         self.timer -= 1
-
+        
+    def moveTo(self,x,y):
+        """Moves the hitbox to the specified coordinates"""
+        assert type(x) == int or type(x) == float, "x must be a number"
+        assert type(y) == int or type(y) == float, "y must be a number"
+        
+        self.xpos = x + self.xoffset
+        self.ypos = y + self.yoffset
+        self.top = self.ypos
+        self.bottom = self.ypos + self.height
+        self.left = self.xpos
+        self.right = self.xpos + self.length
+        
+        
 class Player(Entity):
     """
     A player: inherits the properties of the Entity class and adds way too much stuff (someone pls write a propper desciption)
@@ -170,22 +185,33 @@ class Player(Entity):
         self.config = config["player"]
         self.upgrades = [True,True,True,True,True] #a list of bool
         
-        self.is_attacking = False
-        self.can_dash = True
+        self.facing_right = facing_right
+        self.vertical_direction = 1 #0 is facing up, 1 horizontally and 2 is facing down 
+        
+        self.attacking = False
+
         self.can_doublejump = True
         self.dashing = False
         self.dash_timer = 0
-        self.facing_right = facing_right
-        self.vertical_direction = 1 #0 is facing up, 1 horizontally and 2 is facing down 
+        self.can_dash = True
     
     def movement(self):
-        """Changes the speed values based on the key imputs"""
+        """Reads the imputs and chages the speed and movement status values accordingly"""
         
         if pyxel.btn(pyxel.KEY_D) and not pyxel.btn(pyxel.KEY_Q):
             self.facing_right = True
         if pyxel.btn(pyxel.KEY_Q) and not pyxel.btn(pyxel.KEY_D):
             self.facing_right = False
         
+        if pyxel.btn(pyxel.KEY_Z) and pyxel.btn(pyxel.KEY_S):
+            self.vertical_direction = 1 #0 is facing up, 1 horizontally and 2 is facing down 
+        elif pyxel.btn(pyxel.KEY_Z):
+            self.vertical_direction = 0
+        elif pyxel.btn(pyxel.KEY_S):
+            self.vertical_direction = 2
+        else:
+            self.vertical_direction = 1
+            
         self.dash_timer -= 1
         if self.dash_timer < 0:
             self.dashing = False
@@ -226,7 +252,7 @@ class Player(Entity):
                 self.yspeed = -1
                 self.can_doublejump = False
             
-        if pyxel.btnp(pyxel.MOUSE_BUTTON_RIGHT) and self.can_dash: #temporary stuff for the dash
+        if pyxel.btnp(pyxel.KEY_KP_2) and self.can_dash: #temporary stuff for the dash
             if self.facing_right:
                 self.yspeed = 0
                 self.xspeed = 2
@@ -242,14 +268,26 @@ class Player(Entity):
         
     def combat(self):
         """very temporary"""
-        if pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT):
-            self.attack = Attack(self.xpos+self.length,self.ypos,8,8,self.config["combat"]["damage"],self.config["combat"]["attack_time"])
-            self.is_attacking = True
-        if self.is_attacking:
+        if pyxel.btnp(pyxel.KEY_KP_1) and not self.attacking: #quand le boutton d'attaque est pressé
+            if self.vertical_direction == 1: #si on regarde horizontalement
+                if self.facing_right: #on vérifie de quel côté on regarde et on attaque de ce côté là
+                    self.attack = Attack(self.xpos,self.ypos,8,8,self.config["combat"]["damage"],self.config["combat"]["attack_time"], xoffset = self.length)
+                    self.attacking = True
+                else:
+                    self.attack = Attack(self.xpos,self.ypos,8,8,self.config["combat"]["damage"],self.config["combat"]["attack_time"], xoffset = -self.length)
+                    self.attacking = True
+            elif self.vertical_direction < 1: #si on regarde en haut on attaque en haut
+                self.attack = Attack(self.xpos,self.ypos,8,8,self.config["combat"]["damage"],self.config["combat"]["attack_time"],yoffset = -self.height)
+                self.attacking = True
+            elif self.vertical_direction > 1: #si on regarde en bas on attaque en bas
+                self.attack = Attack(self.xpos,self.ypos,8,8,self.config["combat"]["damage"],self.config["combat"]["attack_time"],yoffset = self.height)
+                self.attacking = True
+            
+        if self.attacking:
             self.attack.update()
-            self.attack.moveTo(round(self.xpos+self.length),round(self.ypos))
+            self.attack.moveTo(round(self.xpos),round(self.ypos))
             if self.attack.timer < 0:
-                self.is_attacking = False
+                self.attacking = False
                 
 class Camera():
     """A class that handles the movement of the camera. xoffset and yoffset are the values by which we offset the drawings on the screen"""
