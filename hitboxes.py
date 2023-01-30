@@ -176,7 +176,7 @@ class Hitbox:
         Takes x and y as parameters, the x and y coordinates od the point
         """
         
-        if x>self.left and x<self.right and y>self.top and y<self.bottom:
+        if x>=self.left and x<=self.right and y>=self.top and y<=self.bottom:
             return True
         else:
             return False 
