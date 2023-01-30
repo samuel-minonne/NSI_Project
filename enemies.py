@@ -19,6 +19,8 @@ class Test_enemy(gameobjects.Entity):
         self.touches_down = False
         self.touches_left = False
         self.touches_right = False
+        self.edge_left = False
+        self.edge_right = False
         for hb in self.walls_list:
             collision_status = hitboxes.doHitboxesTouch(self.hitbox,hb)
             if collision_status == ['y','-']:
@@ -29,7 +31,9 @@ class Test_enemy(gameobjects.Entity):
                 self.touches_left = True
             elif collision_status == ['y','+']:
                 self.touches_up = True
-                
+            if hb.is_point_in(self.xpos-1,self.ypos+10):
+                self.edge_left = True
+            
         if self.xspeed > 0: #si on va vers la droite
             if self.touches_right: #et qu'on touche à droite on s'arrête
                 self.xspeed = -self.xspeed
@@ -52,4 +56,4 @@ class Test_enemy(gameobjects.Entity):
                 self.ypos += self.yspeed
         self.hitbox.moveTo(round(self.xpos),round(self.ypos))
         
-        
+  
