@@ -170,6 +170,17 @@ class Hitbox:
         self.left = self.xpos
         self.right = self.xpos + self.length
         
+    def is_point_in(self, x, y):
+        """
+        Checks if the point with the specified coordinates is strictly in the hitbox.
+        Takes x and y as parameters, the x and y coordinates od the point
+        """
+        
+        if x>self.left and x<self.right and y>self.top and y<self.bottom:
+            return True
+        else:
+            return False 
+        
 def doHitboxesCollide(hitbox1:Hitbox,hitbox2:Hitbox):
     """Checks if 2 hitboxes collide, takes two hitboxes as parameters, returns True if they collide and False if they don't"""
     if ((hitbox1.bottom>=hitbox2.top and hitbox1.bottom<=hitbox2.bottom) or (hitbox1.top>=hitbox2.top and hitbox1.top<=hitbox2.bottom)) and ((hitbox1.left>=hitbox2.left and hitbox1.left<=hitbox2.right ) or (hitbox1.right>=hitbox2.left and hitbox1.right<=hitbox2.right)):
@@ -220,7 +231,6 @@ def how_deep_left(hitbox1:Hitbox,hitbox2:Hitbox):
         return hitbox2.right - hitbox1.left
     else:
         return -1
-
 
 
 
