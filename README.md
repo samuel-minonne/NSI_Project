@@ -56,7 +56,7 @@ Some bosses:</br>
 Who does what:</br>
     - Samuel, collisions and combat sythem</br>
     - Valentin, textures and affichage de textures</br>
-    - Elisa enemies, death animations</br>
+    - Elisa, enemies and death animations</br>
     </br>
     
 
