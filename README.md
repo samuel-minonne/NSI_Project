@@ -34,6 +34,11 @@ A combat system:</br>
     -Attacks deal dammage to entities</br>
 </br>
 
+Who does what:</br>
+    - Samuel, collisions and combat sythem
+    - Valentin, textures and affichage de textures
+    - Elisa enemies, death animations
+
 Level loading system:</br>
     - Takes a list (texture of the room) of lists (rows) of tuples (textures of the objects)</br>
     - each tuple has 2 ints, one is the number of the texture loaded and the other the rotation</br>
