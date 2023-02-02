@@ -34,10 +34,7 @@ A combat system:</br>
     -Attacks deal dammage to entities</br>
 </br>
 
-Who does what:</br>
-    - Samuel, collisions and combat sythem
-    - Valentin, textures and affichage de textures
-    - Elisa enemies, death animations
+
 
 Level loading system:</br>
     - Takes a list (texture of the room) of lists (rows) of tuples (textures of the objects)</br>
@@ -56,8 +53,11 @@ Some bosses:</br>
     - Have to be big and cool and epic and stuff</br>
     </br>
     
-    
-
+Who does what:</br>
+    - Samuel, collisions and combat sythem</br>
+    - Valentin, textures and affichage de textures</br>
+    - Elisa enemies, death animations</br>
+    </br>
     
 
 Random idas:</br>
