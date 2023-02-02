@@ -1,0 +1,6 @@
+{
+    "move_left": "KEY_Q",
+    "move_right": "KEY_Q",
+    "jump": "KEY_SPACE",
+    "attack": "MOUSE_BUTTON_LEFT"
+}
