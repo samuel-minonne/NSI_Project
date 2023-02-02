@@ -223,14 +223,23 @@ def how_deep_right(hitbox1:Hitbox,hitbox2:Hitbox):
     else:
         return 1
 
-def how_deep_left(hitbox1:Hitbox,hitbox2:Hitbox):
-    """returns 0 if the left side of hitbox1 is touching the right side of hitbox2, 
-    if the side is inside hitbox2 returns the distance between the side and the right side of hitbox2 it returns the distance between the 2 sides
+def how_deep_down(hitbox1:Hitbox,hitbox2:Hitbox):
+    """returns 0 if the lower side of hitbox1 is touching the upper side of hitbox2, 
+    if the side is inside hitbox2 returns the distance between the side and the upper side of hitbox2
     returns -1 otherwise"""
-    if  ((hitbox1.bottom>hitbox2.top and hitbox1.bottom<hitbox2.bottom) or (hitbox1.top>hitbox2.top and hitbox1.top<hitbox2.bottom) or (hitbox1.top==hitbox2.top or hitbox1.bottom==hitbox2.bottom)) and hitbox2.right - hitbox1.left >= 0 and hitbox1.left > hitbox2.left:
-        return hitbox2.right - hitbox1.left
+    if  ((hitbox1.left>hitbox2.left and hitbox1.left<hitbox2.right) or (hitbox1.right>hitbox2.left and hitbox1.right<hitbox2.right) or (hitbox1.left==hitbox2.left or hitbox1.right==hitbox2.right)) and hitbox1.bottom - hitbox2.top >= 0 and hitbox1.bottom < hitbox2.bottom:
+        return hitbox1.bottom - hitbox2.top
     else:
         return -1
+    
+def how_deep_up(hitbox1:Hitbox,hitbox2:Hitbox):
+    """returns 0 if the lower side of hitbox1 is touching the upper side of hitbox2, 
+    if the side is inside hitbox2 returns the distance between the side and the upper side of hitbox2
+    returns -1 otherwise"""
+    if  ((hitbox1.left>hitbox2.left and hitbox1.left<hitbox2.right) or (hitbox1.right>hitbox2.left and hitbox1.right<hitbox2.right) or (hitbox1.left==hitbox2.left or hitbox1.right==hitbox2.right)) and hitbox1.top - hitbox2.bottom <= 0 and hitbox1.top > hitbox2.top:
+        return hitbox1.top - hitbox2.bottom
+    else:
+        return 1
 
 
 
