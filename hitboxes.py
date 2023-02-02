@@ -207,7 +207,7 @@ def doHitboxesTouch(hitbox1:Hitbox,hitbox2:Hitbox):
 
 def how_deep_left(hitbox1:Hitbox,hitbox2:Hitbox):
     """returns 0 if the left side of hitbox1 is touching the right side of hitbox2, 
-    if the side is inside hitbox2 returns the distance between the side and the right side of hitbox2 it returns the distance between the 2 sides
+    if the side is inside hitbox2 returns the distance between the side and the right side of hitbox2
     returns -1 otherwise"""
     if  ((hitbox1.bottom>hitbox2.top and hitbox1.bottom<hitbox2.bottom) or (hitbox1.top>hitbox2.top and hitbox1.top<hitbox2.bottom) or (hitbox1.top==hitbox2.top or hitbox1.bottom==hitbox2.bottom)) and hitbox2.right - hitbox1.left >= 0 and hitbox1.left > hitbox2.left:
         return hitbox2.right - hitbox1.left
@@ -216,12 +216,12 @@ def how_deep_left(hitbox1:Hitbox,hitbox2:Hitbox):
 
 def how_deep_right(hitbox1:Hitbox,hitbox2:Hitbox):
     """returns 0 if the right side of hitbox1 is touching the left side of hitbox2, 
-    if the side is inside hitbox2 returns the distance between the side and the left side of hitbox2 it returns the distance between the 2 sides
-    returns -1 otherwise"""
-    if  ((hitbox1.bottom>hitbox2.top and hitbox1.bottom<hitbox2.bottom) or (hitbox1.top>hitbox2.top and hitbox1.top<hitbox2.bottom) or (hitbox1.top==hitbox2.top or hitbox1.bottom==hitbox2.bottom)) and hitbox2.left - hitbox1.right >= 0 and hitbox1.right >= hitbox2.right:
+    if the side is inside hitbox2 returns the negative distance between the side and the left side of hitbox2
+    returns 1 otherwise"""
+    if  ((hitbox1.bottom>hitbox2.top and hitbox1.bottom<hitbox2.bottom) or (hitbox1.top>hitbox2.top and hitbox1.top<hitbox2.bottom) or (hitbox1.top==hitbox2.top or hitbox1.bottom==hitbox2.bottom)) and hitbox2.left - hitbox1.right <= 0 and hitbox1.right <= hitbox2.right:
         return hitbox2.left - hitbox1.right
     else:
-        return -1
+        return 1
 
 def how_deep_left(hitbox1:Hitbox,hitbox2:Hitbox):
     """returns 0 if the left side of hitbox1 is touching the right side of hitbox2, 
