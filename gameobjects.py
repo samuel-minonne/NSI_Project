@@ -289,6 +289,21 @@ class Player(Entity):
             if self.attack.timer < 0:
                 self.attacking = False
                 
+    def draw(self,x,y):
+        """Draws the player at x and y coordinates. x and y are the top left corner of the player"""
+        pyxel.blt(x,y,1,24,0,8,8)
+        if self.facing_right:
+            pyxel.blt(x,y,1,24,0,-8,8)
+        if self.dashing:
+            pyxel.blt(x,y,1,56,0,8,8)
+        if self.dashing and self.facing_right:
+            pyxel.blt(x,y,1,64,0,8,8)
+        if pyxel.btn(pyxel.KEY_SPACE):
+            pyxel.blt(x,y,1,48,0,8,8)
+        if pyxel.btn(pyxel.KEY_SPACE) and self.facing_right:
+            pyxel.blt(x,y,1,48,0,-8,8)
+            
+           
 class Camera():
     """A class that handles the movement of the camera. xoffset and yoffset are the values by which we offset the drawings on the screen"""
     def __init__(self,xoffset = 0, yoffset = 0):
