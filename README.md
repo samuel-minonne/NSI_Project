@@ -6,10 +6,10 @@ make a retro type game in python using pyxel</br>
 
 Todo list:</br>
     - add a Draw() method to the player for easyer animations and cleaner code (Valentin)</br>
-    - Make the Testenemy turn around when he hits ledge (Elisa)</br>
+    - Make the Testenemy turn around when it hits the edge (Elisa)</br>
     - implement the new collisions system (Samuel)</br>
-    - Make it so that the player attack actually does dammage to enemies</br(Samuel)</br>
-    - Invent a title</br>
+    - Make it so that when the player attacks it actually does dammage to the enemies</br(Samuel)</br>
+    - Find a title</br>
     </br>
 
 Specifications:</br>
