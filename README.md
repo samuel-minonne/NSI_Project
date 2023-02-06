@@ -5,8 +5,8 @@ make a retro type game in python using pyxel</br>
 </br>
 
 Todo list:</br>
-    - add a Draw() method to the player for easyer animations and cleaner code (Valentin)</br>
-    - si possible ajouter la fonction permettant de charger le dessin entier d'un niveau (Vlentin)</br>
+    - working walking animation (Valentin)</br>
+    - si possible ajouter la fonction permettant de charger le dessin entier d'un niveau (Valentin)</br>
     - Make the Testenemy turn around when it hits the edge (Elisa)</br>
     - si possible faire en sorte que l'ennemi fasse des degats au joueur(Elisa)</br>
     - afficher la vie du joueur (Elisa)</br>
