@@ -61,17 +61,7 @@ def draw():
     
     for w  in room.walls_hitboxes:
         pyxel.blt(camera.xOnScreen(w.xpos),camera.yOnScreen(w.ypos),0,8,0,8,8)
-    pyxel.blt(camera.xOnScreen(room.player.xpos),camera.yOnScreen(room.player.ypos),1,24,0,8,8)
-    if room.player.facing_right:
-         pyxel.blt(camera.xOnScreen(room.player.xpos),camera.yOnScreen(room.player.ypos),1,24,0,-8,8)
-    if room.player.dashing:
-        pyxel.blt(camera.xOnScreen(room.player.xpos),camera.yOnScreen(room.player.ypos),1,56,0,8,8)
-    if room.player.dashing and room.player.facing_right:
-        pyxel.blt(camera.xOnScreen(room.player.xpos),camera.yOnScreen(room.player.ypos),1,64,0,8,8)
-    if pyxel.btn(pyxel.KEY_SPACE):
-        pyxel.blt(camera.xOnScreen(room.player.xpos),camera.yOnScreen(room.player.ypos),1,48,0,8,8)
-    if pyxel.btn(pyxel.KEY_SPACE) and room.player.facing_right:
-        pyxel.blt(camera.xOnScreen(room.player.xpos),camera.yOnScreen(room.player.ypos),1,48,0,-8,8)
+    room.player.draw(camera.xOnScreen(room.player.xpos),camera.yOnScreen(room.player.ypos))
         
     if room.player.hp <= 0 :
         pyxel.cls(0)
