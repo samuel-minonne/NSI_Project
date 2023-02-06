@@ -5,8 +5,10 @@ make a retro type game in python using pyxel</br>
 </br>
 
 Todo list:</br>
-    - Add an isTouchingLeft, isTouchingRight, isTouchingUp,isTouchingDown methods to the hitbox class</br>
-    - Add a is_point_in method to hitbox class</br>
+    - add a Draw() method to the player for easyer animations and cleaner code (Valentin)</br>
+    - Make the Testenemy turn around when he hits ledge (Elisa)</br>
+    - implement the new collisions system (Samuel)</br>
+    - Make it so that the player attack actually does dammage to enemies</br(Samuel)</br>
     - Invent a title</br>
     </br>
 
