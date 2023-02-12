@@ -8,7 +8,6 @@ Todo list:</br>
     - working walking animation (Valentin)</br>
     - si possible ajouter la fonction permettant de charger le dessin entier d'un niveau (Valentin)</br>
     - si possible faire en sorte que l'ennemi fasse des degats au joueur (Elisa)</br>
-    - afficher la vie du joueur (Elisa)</br>
     - implement the new collisions system (Samuel)</br>
     - Make it so that when the player attacks it actually does dammage to the enemies (Samuel)</br>
     - Ajouter des tests unitaires</br>
