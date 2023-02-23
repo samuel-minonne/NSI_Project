@@ -149,7 +149,7 @@ class Entity(Gameobject):
 
 class Attack(hitboxes.Hitbox):
     """An Attack, a child of the Hitbox class with a duration, a damage and a list of entities that have been hit"""
-    def __init__(self, x, y, l, h, dmg, duration:int,xoffset = 0,yoffset = 0):
+    def __init__(self, x, y, l, h, dmg, duration:int,hit_cooldown = 0,xoffset = 0,yoffset = 0):
         super().__init__(x, y, l, h,)
         """Creates an attack"""
         self.dmg = dmg #the dammage dealt by the attack
@@ -158,8 +158,13 @@ class Attack(hitboxes.Hitbox):
         self.xoffset = xoffset
         self.yoffset = yoffset
         
-    def update(self):
+    def update(self, e_list:list):
+        """Updates the attack timer and does dammage to every entity in the e_list that toches the attack"""
         self.timer -= 1
+        for e in e_list:
+            if hitboxes.doHitboxesCollide(self,e.hitbox) and e not in self.entities_hit:
+                e.hp -= self.dmg
+                self.entities_hit.append(e)
         
     def moveTo(self,x,y):
         """Moves the hitbox to the specified coordinates"""
@@ -266,7 +271,7 @@ class Player(Entity):
                 self.dashing = True
                 self.dash_timer = self.config["movement"]["dash_time"]
         
-    def combat(self):
+    def combat(self, enemies_list:list):
         """very temporary"""
         if pyxel.btnp(pyxel.KEY_KP_1) and not self.attacking: #quand le boutton d'attaque est pressé
             if self.vertical_direction == 1: #si on regarde horizontalement
@@ -284,7 +289,7 @@ class Player(Entity):
                 self.attacking = True
             
         if self.attacking:
-            self.attack.update()
+            self.attack.update(enemies_list)
             self.attack.moveTo(round(self.xpos),round(self.ypos))
             if self.attack.timer < 0:
                 self.attacking = False
