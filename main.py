@@ -35,7 +35,7 @@ pyxel.init(config["game"]["width"], config["game"]["height"], title="Protoknight
 def update():
     room.player.update()
     room.player.movement()
-    room.player.combat()
+    room.player.combat(room.enemies_list)
     camera.focusOn(room.player.xpos+4,room.player.ypos+4)
     #print(hitboxes.how_deep_right(room.player.hitbox,room.walls_hitboxes[1]))
     print(room.walls_hitboxes[8].is_point_in(room.player.xpos,room.player.ypos+10))
