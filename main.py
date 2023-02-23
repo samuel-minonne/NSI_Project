@@ -40,7 +40,10 @@ def update():
     #print(hitboxes.how_deep_right(room.player.hitbox,room.walls_hitboxes[1]))
     print(room.walls_hitboxes[8].is_point_in(room.player.xpos,room.player.ypos+10))
     for e in room.enemies_list:
-        e.update()
+        if e.hp > 0:
+            e.update()
+        else:
+            room.enemies_list.remove(e)
 
     if room.player.ypos > 250:
         room.player.hp = 0
