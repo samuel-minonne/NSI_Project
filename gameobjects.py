@@ -307,7 +307,32 @@ class Player(Entity):
             pyxel.blt(x,y,1,48,0,8,8)
         if pyxel.btn(pyxel.KEY_SPACE) and self.facing_right:
             pyxel.blt(x,y,1,48,0,-8,8)
-            
+        if pyxel.btnp(pyxel.KEY_Q):
+            self.frame_count = 0
+        if pyxel.btn(pyxel.KEY_Q):
+            self.frame_count += 1
+            if self.frame_count <= 15:
+                pyxel.blt(x,y,1,32,0,8,8)
+            elif self.frame_count <= 30:
+                pyxel.blt(x,y,1,40,0,8,8)
+            elif self.frame_count <= 45:
+                pyxel.blt(x,y,1,32,0,8,8)
+            elif self.frame_count == 60:
+                pyxel.blt(x,y,1,24,0,8,8)
+                self.frame_count = 0
+        if pyxel.btnp(pyxel.KEY_D):
+            self.frame_count = 0
+        if pyxel.btn(pyxel.KEY_D):
+            self.frame_count += 1
+            if self.frame_count <= 15:
+                pyxel.blt(x,y,1,32,0,-8,8)
+            elif self.frame_count <= 30:
+                pyxel.blt(x,y,1,40,0,-8,8)
+            elif self.frame_count <= 45:
+                pyxel.blt(x,y,1,32,0,-8,8)
+            elif self.frame_count == 60:
+                pyxel.blt(x,y,1,24,0,-8,8)
+                self.frame_count = 0
            
 class Camera():
     """A class that handles the movement of the camera. xoffset and yoffset are the values by which we offset the drawings on the screen"""
