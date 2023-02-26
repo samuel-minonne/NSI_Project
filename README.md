@@ -5,7 +5,6 @@ make a retro type game in python using pyxel</br>
 </br>
 
 Todo list:</br>
-    - working walking animation (Valentin)</br>
     - si possible ajouter la fonction permettant de charger le dessin entier d'un niveau (Valentin)</br>
     - si possible faire en sorte que l'ennemi fasse des degats au joueur (Elisa)</br>
     - implement the new collisions system (Samuel)</br>
