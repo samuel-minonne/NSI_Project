@@ -333,6 +333,10 @@ class Player(Entity):
             elif self.frame_count == 30:
                 pyxel.blt(x,y,1,24,0,-8,8)
                 self.frame_count = 0
+        if self.yspeed > 0 and not self.touches_down:
+            pyxel.blt(x,y,1,64,0,8,8)
+        if self.yspeed > 0 and self.facing_right and not self.touches_down:
+            pyxel.blt(x,y,1,64,0,-8,8)
            
 class Camera():
     """A class that handles the movement of the camera. xoffset and yoffset are the values by which we offset the drawings on the screen"""
