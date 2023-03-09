@@ -52,7 +52,9 @@ def draw():
     pyxel.cls(0)
     pyxel.rect(camera.xOnScreen(room.player.xpos),camera.yOnScreen(room.player.ypos),room.player.length,room.player.height,3)
 
-    pyxel.text(config["game"]["width"]/2,config["game"]["height"]/1.1, format(room.player.hp),7)
+    
+    pyxel.text(config["game"]["width"]/10,config["game"]["height"]/10, "lives:",7)
+    pyxel.text(config["game"]["width"]/10 + 25,config["game"]["height"]/10 , format(room.player.hp),7)
 
     if room.player.attacking:
         pyxel.rect(camera.xOnScreen(room.player.attack.xpos),camera.yOnScreen(room.player.attack.ypos),room.player.attack.length,room.player.attack.height,14)
@@ -62,6 +64,8 @@ def draw():
 
     for i in range (len(room.enemies_list)):
         pyxel.rect(camera.xOnScreen(room.enemies_list[i].xpos),camera.yOnScreen(room.enemies_list[i].ypos),room.enemies_list[i].length,room.enemies_list[i].height,2)
+
+    room.player.draw(camera.xOnScreen(room.player.xpos),camera.yOnScreen(room.player.ypos))
 
     if room.player.hp <= 0 :
         pyxel.cls(0)
