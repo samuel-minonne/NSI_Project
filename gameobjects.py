@@ -296,47 +296,70 @@ class Player(Entity):
                 
     def draw(self,x,y):
         """Draws the player at x and y coordinates. x and y are the top left corner of the player"""
-        pyxel.blt(x,y,1,24,0,8,8)
-        if self.facing_right:
-            pyxel.blt(x,y,1,24,0,-8,8)
-        if self.dashing:
-            pyxel.blt(x,y,1,56,0,8,8)
+        if self.dashing and not self.facing_right:
+            pyxel.blt(x,y,1,56,0,8,8,colkey=0)
+            print("dashing")
         if self.dashing and self.facing_right:
-            pyxel.blt(x,y,1,64,0,8,8)
-        if pyxel.btn(pyxel.KEY_SPACE):
-            pyxel.blt(x,y,1,48,0,8,8)
+            pyxel.blt(x,y,1,56,0,-8,8,colkey=0)
+            print("dashing right")
+        if pyxel.btn(pyxel.KEY_SPACE) and not self.facing_right:
+            pyxel.blt(x,y,1,48,0,8,8,colkey=0)
+            print("jumping")
         if pyxel.btn(pyxel.KEY_SPACE) and self.facing_right:
-            pyxel.blt(x,y,1,48,0,-8,8)
-        if pyxel.btnp(pyxel.KEY_Q)  and self.touches_down:
+            pyxel.blt(x,y,1,48,0,-8,8,colkey=0)
+            print("jumping right")
+        if pyxel.btnp(pyxel.KEY_Q) and self.touches_down:
             self.frame_count = 0
         if pyxel.btn(pyxel.KEY_Q) and self.touches_down:
             self.frame_count += 1
             if self.frame_count <= 7:
-                pyxel.blt(x,y,1,32,0,8,8)
-            elif self.frame_count <= 15:and self.touches_down
-                pyxel.blt(x,y,1,40,0,8,8)
+                pyxel.blt(x,y,1,32,0,8,8,colkey=0)
+            elif self.frame_count <= 15:
+                pyxel.blt(x,y,1,40,0,8,8,colkey=0)
             elif self.frame_count <= 22:
-                pyxel.blt(x,y,1,32,0,8,8)
+                pyxel.blt(x,y,1,32,0,8,8,colkey=0)
             elif self.frame_count == 30:
-                pyxel.blt(x,y,1,24,0,8,8)
+                pyxel.blt(x,y,1,24,0,8,8,colkey=0)
                 self.frame_count = 0
         if pyxel.btnp(pyxel.KEY_D) and self.touches_down:
             self.frame_count = 0
-        if pyxel.btn(pyxel.KEY_D)and self.touches_down:
+        if pyxel.btn(pyxel.KEY_D) and self.touches_down:
             self.frame_count += 1
             if self.frame_count <= 7:
-                pyxel.blt(x,y,1,32,0,-8,8)
+                pyxel.blt(x,y,1,32,0,-8,8,colkey=0)
             elif self.frame_count <= 15:
-                pyxel.blt(x,y,1,40,0,-8,8)
+                pyxel.blt(x,y,1,40,0,-8,8,colkey=0)
             elif self.frame_count <= 22:
-                pyxel.blt(x,y,1,32,0,-8,8)
+                pyxel.blt(x,y,1,32,0,-8,8,colkey=0)
             elif self.frame_count == 30:
-                pyxel.blt(x,y,1,24,0,-8,8)
+                pyxel.blt(x,y,1,24,0,-8,8,colkey=0)
                 self.frame_count = 0
-        if self.yspeed > 0 and not self.touches_down:
-            pyxel.blt(x,y,1,64,0,8,8)
-        if self.yspeed > 0 and self.facing_right and not self.touches_down:
-            pyxel.blt(x,y,1,64,0,-8,8)
+        if not self.touches_down and not self.facing_right and self.yspeed > 0:
+            pyxel.blt(x,y,1,64,0,8,8,colkey=0)
+            print("falling")
+        if  self.facing_right and not self.touches_down and self.yspeed > 0:
+            pyxel.blt(x,y,1,64,0,-8,8,colkey=0)
+            print("falling right")
+        if self.hp <= 0:
+            pyxel.blt(x,y,1,0,0,8,8,colkey=0)
+        if self.xspeed == 0 and self.yspeed == 0.05 and not self.facing_right:
+            pyxel.blt(x,y,1,24,0,8,8,colkey=0)
+        if self.xspeed == 0 and self.yspeed == 0.05 and self.facing_right :
+            pyxel.blt(x,y,1,24,0,-8,8,colkey=0)
+        if self.attacking and self.facing_right:
+            if self.attack.timer >= 8:
+                pyxel.blt(x+6,y,1,0,8,8,8,colkey=0)
+            if self.attack.timer > 2 and self.attack.timer < 8:
+                pyxel.blt(x+6,y,1,8,8,8,8,colkey=0)
+            if self.attack.timer <= 2:
+                pyxel.blt(x+6,y,1,16,8,8,8,colkey=0)
+        if self.attacking and not self.facing_right:
+            if self.attack.timer <= 8:
+                pyxel.blt(x-8,y+1,1,0,8,-8,8,colkey=0)
+            if self.attack.timer > 2:
+                pyxel.blt(x-8,y+1,1,8,8,-8,8,colkey=0)
+            if self.attack.timer <= 2:
+                pyxel.blt(x-8,y+1,1,16,8,-8,8,colkey=0)
            
 class Camera():
     """A class that handles the movement of the camera. xoffset and yoffset are the values by which we offset the drawings on the screen"""
