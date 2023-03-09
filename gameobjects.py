@@ -61,12 +61,34 @@ class Entity(Gameobject):
         self.touches_right = False
         self.hp = hp
         
-
-
+        
     def update(self):
         """
         Updates the entity (position, hp,...). MUST be executed once per frame.
         """
+        
+        def get_edge_to_correct(hb:hitboxes.Hitbox):
+            depth_left = hitboxes.how_deep_left(self.hitbox,hb)
+            depth_right = -hitboxes.how_deep_right(self.hitbox,hb)
+            depth_down = -hitboxes.how_deep_down(self.hitbox,hb)
+            depth_up = hitboxes.how_deep_up(self.hitbox,hb)
+
+            print('ran get_edge')
+            print('down',depth_down)
+            print('up',depth_up)
+            print('left',depth_left)
+            print('right',depth_right)
+
+            if depth_left >= depth_right and depth_left >= depth_down and depth_left >= depth_up and self.xspeed != 0:
+                return ['x','-']
+            elif depth_right > depth_left and depth_right > depth_down and depth_right > depth_up and self.xspeed != 0:
+                return ['x','+']
+            elif depth_down <= depth_right and depth_down <= depth_left and depth_down <= depth_up and self.yspeed != 0:
+                return ['y','-']
+            elif depth_up < depth_right and depth_up < depth_down and depth_up < depth_left and self.yspeed != 0:
+                return ['y','+']
+            
+            
         self.touches_up = False
         self.touches_down = False
         self.touches_left = False
@@ -81,6 +103,23 @@ class Entity(Gameobject):
                 self.touches_left = True
             elif collision_status == ['y','+']:
                 self.touches_up = True
+            elif collision_status == ['o','o']: #Si les deux hitbox sont l'une dans l'autre
+                closest_edge = get_edge_to_correct(hb)
+                print(closest_edge)
+                print(hitboxes.how_deep_right(self.hitbox,hb))
+                print(hitboxes.how_deep_left(self.hitbox,hb))
+                if closest_edge == ['x','-']:
+                    self.xpos += hitboxes.how_deep_left(self.hitbox,hb)
+                    self.touches_right = True
+                elif closest_edge == ['x','+']:
+                    self.xpos += hitboxes.how_deep_right(self.hitbox,hb)
+                    self.touches_left = True
+                elif closest_edge == ['y','-']:
+                    self.ypos -= hitboxes.how_deep_down(self.hitbox,hb)
+                    self.touches_down = True
+                elif closest_edge == ['y','+']:
+                    self.ypos -= hitboxes.how_deep_up(self.hitbox,hb)
+                    self.touches_up = True
                 
         if self.xspeed > 0: #si on va vers la droite
             if self.touches_right: #et qu'on touche à droite on s'arrête
@@ -102,6 +141,8 @@ class Entity(Gameobject):
                 self.yspeed = 0
             else:
                 self.ypos += self.yspeed
+    
+
         self.hitbox.moveTo(round(self.xpos),round(self.ypos))
         
         
