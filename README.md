@@ -4,8 +4,9 @@ Objective:</br>
 make a retro type game in python using pyxel</br>
 </br>
 
-Todo list:</br>
+To-do list:</br>
     - si possible ajouter la fonction permettant de charger le dessin entier d'un niveau (Valentin)</br>
+    - relier le système d'ids au reste du code (Valentin)</br>
     - faire different types d'enemis (Elisa)</br>
     - implement the new collisions system (Samuel)</br>
     - Ajouter des tests unitaires</br>
