@@ -357,6 +357,13 @@ class Player(Entity):
             if self.attack.timer < 0:
                 self.attacking = False
                 
+        for e in enemies_list:
+            if hitboxes.doHitboxesCollide(e.hitbox,self.hitbox) and self.iframes<=0:
+                self.hp -= 1
+                self.iframes = 60 
+        
+        self.iframes -= 1
+                
     def draw(self,x,y):
         """Draws the player at x and y coordinates. x and y are the top left corner of the player"""
         if self.dashing and not self.facing_right:
