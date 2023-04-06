@@ -257,6 +257,7 @@ class Player(Entity):
         self.vertical_direction = 1 #0 is facing up, 1 horizontally and 2 is facing down 
         
         self.attacking = False
+        self.iframes = 0
 
         self.can_doublejump = True
         self.dashing = False
