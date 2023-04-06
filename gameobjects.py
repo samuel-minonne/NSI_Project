@@ -41,7 +41,6 @@ class Gameobject:
         self.height = h
         self.hitbox = hitboxes.Hitbox(self.xpos,self.ypos,self.length,self.height)
 
-
 class Entity(Gameobject):
     """
     A Gameobject that can move and has hp: inherits the properties of the Gameobject class, and adds a x and y speed and  move method"""
@@ -61,7 +60,8 @@ class Entity(Gameobject):
         self.touches_right = False
         self.hp = hp
         
-        
+
+
     def update(self):
         """
         Updates the entity (position, hp,...). MUST be executed once per frame.
@@ -79,6 +79,7 @@ class Entity(Gameobject):
             print('left',depth_left)
             print('right',depth_right)
 
+            
             if depth_left >= depth_right and depth_left >= depth_down and depth_left >= depth_up and self.xspeed != 0:
                 return ['x','-']
             elif depth_right > depth_left and depth_right > depth_down and depth_right > depth_up and self.xspeed != 0:
@@ -87,7 +88,6 @@ class Entity(Gameobject):
                 return ['y','-']
             elif depth_up < depth_right and depth_up < depth_down and depth_up < depth_left and self.yspeed != 0:
                 return ['y','+']
-            
             
         self.touches_up = False
         self.touches_down = False
@@ -178,15 +178,37 @@ class Entity(Gameobject):
 
         self.yspeed = speed
 
-    def setSpeedWithAngle(angle,speed):
+    def setSpeedWithAngle(self,angle,speed):
         """
-        Sets the xspeed and yspeed values based on a speed and an angle
+        Sets the xspeed and yspeed values based on a speed and an angle (in degrees)
         """
+        self.xspeed = math.cos(angle)*speed
+        self.yspeed = math.sin(angle)*speed
+
+
+    def addSpeedWithAngle(self,angle,speed):
+        """
+        Adds the xspeed and yspeed values to the current ones based on a speed and an angle (in degrees)
+        """
+        self.xspeed += math.cos(angle)*speed
+        self.yspeed += math.sin(angle)*speed
 
     def moveWithSpeed(self):
         """
         Moves the entity with its xspeed and yspeed
         """
+        
+class Item(Gameobject):
+    """An item that can be picked up"""
+    def __init__(self, x, y, name:str, item:int):
+        """creates an item"""
+        super().__init__(x, y, 5, 5)
+        self.name = name
+        self.item = item # 0:dash 1:wallbounce 2:double jump
+
+    def draw(self,x,y):
+        """Draws an item"""
+        pyxel.rect(x,y,self.length,self.height,15)
 
 class Attack(hitboxes.Hitbox):
     """An Attack, a child of the Hitbox class with a duration, a damage and a list of entities that have been hit"""
