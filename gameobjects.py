@@ -321,7 +321,7 @@ class Player(Entity):
                 self.yspeed = -1
                 self.can_doublejump = False
             
-        if pyxel.btnp(pyxel.KEY_KP_2) and self.can_dash: #temporary stuff for the dash
+        if pyxel.btnp(pyxel.KEY_E) and self.can_dash: #temporary stuff for the dash
             if self.facing_right:
                 self.yspeed = 0
                 self.xspeed = 2
@@ -337,7 +337,7 @@ class Player(Entity):
         
     def combat(self, enemies_list:list):
         """very temporary"""
-        if pyxel.btnp(pyxel.KEY_KP_1) and not self.attacking: #quand le boutton d'attaque est pressé
+        if pyxel.btnp(pyxel.KEY_A) and not self.attacking: #quand le boutton d'attaque est pressé
             if self.vertical_direction == 1: #si on regarde horizontalement
                 if self.facing_right: #on vérifie de quel côté on regarde et on attaque de ce côté là
                     self.attack = Attack(self.xpos,self.ypos,8,8,self.config["combat"]["damage"],self.config["combat"]["attack_time"], xoffset = self.length)
@@ -412,9 +412,9 @@ class Player(Entity):
             pyxel.blt(x,y,1,64,0,-8,8,colkey=0)
         if self.hp <= 0:
             pyxel.blt(x,y,1,0,0,8,8,colkey=0)
-        if self.xspeed == 0 and self.yspeed == 0.05 and not self.facing_right:
+        if self.xspeed == 0 and self.yspeed == 0 and not self.facing_right:
             pyxel.blt(x,y,1,24,0,8,8,colkey=0)
-        if self.xspeed == 0 and self.yspeed == 0.05 and self.facing_right :
+        if self.xspeed == 0 and self.yspeed == 0 and self.facing_right :
             pyxel.blt(x,y,1,24,0,-8,8,colkey=0)
         if self.attacking and self.facing_right:
             if self.attack.timer >= 8:
