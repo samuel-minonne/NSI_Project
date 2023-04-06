@@ -179,7 +179,8 @@ class Hitbox:
         if x>=self.left and x<=self.right and y>=self.top and y<=self.bottom:
             return True
         else:
-            return False 
+            return False
+        
         
 def doHitboxesCollide(hitbox1:Hitbox,hitbox2:Hitbox):
     """Checks if 2 hitboxes collide, takes two hitboxes as parameters, returns True if they collide and False if they don't"""
@@ -218,7 +219,7 @@ def how_deep_right(hitbox1:Hitbox,hitbox2:Hitbox):
     """returns 0 if the right side of hitbox1 is touching the left side of hitbox2, 
     if the side is inside hitbox2 returns the negative distance between the side and the left side of hitbox2
     returns 1 otherwise"""
-    if  ((hitbox1.bottom>hitbox2.top and hitbox1.bottom<hitbox2.bottom) or (hitbox1.top>hitbox2.top and hitbox1.top<hitbox2.bottom) or (hitbox1.top==hitbox2.top or hitbox1.bottom==hitbox2.bottom)) and hitbox2.left - hitbox1.right <= 0 and hitbox1.right <= hitbox2.right:
+    if  ((hitbox1.bottom>hitbox2.top and hitbox1.bottom<hitbox2.bottom) or (hitbox1.top>hitbox2.top and hitbox1.top<hitbox2.bottom) or (hitbox1.top==hitbox2.top or hitbox1.bottom==hitbox2.bottom)) and hitbox2.left - hitbox1.right <= 0 and hitbox1.right < hitbox2.right:
         return hitbox2.left - hitbox1.right
     else:
         return 1
@@ -234,13 +235,28 @@ def how_deep_down(hitbox1:Hitbox,hitbox2:Hitbox):
     
 def how_deep_up(hitbox1:Hitbox,hitbox2:Hitbox):
     """returns 0 if the lower side of hitbox1 is touching the upper side of hitbox2, 
-    if the side is inside hitbox2 returns the distance between the side and the upper side of hitbox2
-    returns -1 otherwise"""
+    if the side is inside hitbox2 returns the negative distance between the side and the lower side of hitbox2
+    returns 1 otherwise"""
     if  ((hitbox1.left>hitbox2.left and hitbox1.left<hitbox2.right) or (hitbox1.right>hitbox2.left and hitbox1.right<hitbox2.right) or (hitbox1.left==hitbox2.left or hitbox1.right==hitbox2.right)) and hitbox1.top - hitbox2.bottom <= 0 and hitbox1.top > hitbox2.top:
         return hitbox1.top - hitbox2.bottom
     else:
         return 1
 
+def get_closest_edge(hitbox1:Hitbox,hitbox2:Hitbox):
+    depth_left = how_deep_left(hitbox1,hitbox2)
+    depth_right = abs(how_deep_right(hitbox1,hitbox2))
+    depth_down = how_deep_down(hitbox1,hitbox2)
+    depth_up = abs(how_deep_up(hitbox1,hitbox2))
+
+    if depth_left <= depth_right and depth_left <= depth_down and depth_left <= depth_up:
+        return ['x','-']
+    elif depth_right < depth_left and depth_right < depth_down and depth_right < depth_up:
+        return ['x','+']
+    elif depth_down <= depth_right and depth_down <= depth_left and depth_down <= depth_up:
+        return ['y','-']
+    elif depth_up < depth_right and depth_up < depth_down and depth_up < depth_left:
+        return ['y','+']
+    
 
 
 if __name__ == "__main__":
