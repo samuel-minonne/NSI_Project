@@ -1,12 +1,13 @@
 import pyxel
 import hitboxes
 import gameobjects
+import math
 
 class Test_enemy(gameobjects.Entity):
    def __init__(self,x,y,walls_list,speedx = 0,speedy = 0,facing_right = True):
       super().__init__(x,y,8,8,5,walls_list)#mettre les valeur manuellement
-      self.xspeed = 0.5
-   
+      self.xspeed = 0.5      
+
    def update(self):
       """
       Updates the entity (position, hp,...). MUST be executed once per frame.
@@ -35,9 +36,11 @@ class Test_enemy(gameobjects.Entity):
             self.edge_left = True
          if not hb.is_point_in(self.xpos+self.length+1,self.ypos+self.height) and hb.is_point_in(self.xpos+self.length,self.ypos+self.height):
             self.edge_right = True
-         
+      
+
+
       if self.xspeed > 0: #si on va vers la droite
-         if self.touches_right or self.edge_right: #et qu'on touche à droite on tourne
+         if self.touches_right or self.edge_right: #et qu'on touche ou que y'a du vide à droite on tourne 
                self.xspeed = -self.xspeed
          else:
                self.xpos += self.xspeed #sinon (si on touche pas) on se déplace de xspeed
@@ -57,7 +60,32 @@ class Test_enemy(gameobjects.Entity):
          else:
                self.ypos += self.yspeed
 
-      
 
       self.hitbox.moveTo(round(self.xpos),round(self.ypos))
-   
+
+class Bat(gameobjects.Entity):
+     def __init__(self, x, y, walls_list, speedx = 0, speedy = 0, facing_right = True):
+         super().__init__(x,y,8,8,5,walls_list)#mettre les valeur manuellement
+         self.xspeed = 0.7  
+
+     class Bat(gameobjects.Entity):
+      def init(self, x, y, walls_list, speedx = 0, speedy = 0, facing_right = True):
+            super().init(x,y,8,8,5,walls_list)#mettre les valeur manuellement
+            self.xspeed = 0.7
+
+      def mouvement(self,player):
+
+            if (player.xpos - self.xpos)**2 + (player.ypos - self.ypos)**2 <= 2304: 
+                  angle_to_player = math.degrees((self.ypos-player.ypos)/(self.xpos-player.xpos))
+                  self.addSpeedWithAngle(angle_to_player,0.25)
+
+            else:
+                  if self.xspeed > 0:
+                        self.xspeed -= 0.25
+                  elif self.xspeed < 0:
+                        self.xspeed += 0.25
+
+                  if self.yspeed > 0:
+                        self.yspeed -= 0.25
+                  elif self.yspeed < 0:
+                        self.yspeed += 0.25
