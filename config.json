@@ -1,4 +1,4 @@
-{
+ {
     "game":
     {
         "height": 200,
@@ -14,8 +14,8 @@
             "max_speed": 1.0,
             "ground_drag": 0.2,
             "gravity": 0.05,
-            "ascending_speed": 0.75,
-            "max_falling_speed": 1.0,
+            "jump_force": 1.5,
+            "max_falling_speed": 1.5,
             "dash_speed": 2.0,
             "dash_time": 7
         },
