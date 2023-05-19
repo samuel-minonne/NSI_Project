@@ -17,14 +17,6 @@ class Room:
     def __init__(self) -> None:
         """Creates a Room"""
         self.walls_hitboxes = [] #All the hitboxes of the walls
-        #self.walls_hitboxes.append(hitboxes.Hitbox(8,80,72,8))
-        #self.walls_hitboxes.append(hitboxes.Hitbox(48,72,9,8))
-        #self.walls_hitboxes.append(hitboxes.Hitbox(80,72,8,8))
-        #self.walls_hitboxes.append(hitboxes.Hitbox(8,64,8,8))
-        #self.walls_hitboxes.append(hitboxes.Hitbox(0,56,8,8))
-        #self.walls_hitboxes.append(hitboxes.Hitbox(32,64,8,8))
-        #self.walls_hitboxes.append(hitboxes.Hitbox(112,16,8,64))
-        #self.walls_hitboxes.append(hitboxes.Hitbox(32,104,48,8))
 
         self.load_hitboxes("./room1.json")
 
@@ -32,7 +24,7 @@ class Room:
         self.load_textures("./room1.json")
         
         self.enemies_list=[]
-        self.enemies_list.append(enemies.Test_enemy(5,8,self.walls_hitboxes))
+        self.enemies_list.append(enemies.Bug(5,8,self.walls_hitboxes))
         self.enemies_list.append(enemies.Bat(32,16,self.walls_hitboxes))
 
 
