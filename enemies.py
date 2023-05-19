@@ -3,7 +3,7 @@ import hitboxes
 import gameobjects
 import math
 
-class Test_enemy(gameobjects.Entity):
+class Bug(gameobjects.Entity):
    def __init__(self,x,y,walls_list,speedx = 0,speedy = 0,facing_right = True):
       super().__init__(x,y,8,8,5,walls_list)#mettre les valeur manuellement
       self.xspeed = 0.5      
@@ -67,7 +67,10 @@ class Test_enemy(gameobjects.Entity):
      print("ye")
 
    def draw(self,x,y):
-        pyxel.rect(x,y,self.length,self.height,4)
+        if self.xspeed > 0:
+            pyxel.blt(x,y,1,16,24,8,8,0)
+        else:
+             pyxel.blt(x,y,1,16,24,-8,8,0)
         
 
 class Bat(gameobjects.Entity):
