@@ -75,6 +75,7 @@ class Bat(gameobjects.Entity):
       def __init__(self, x, y, walls_list, speedx = 0, speedy = 0, facing_right = True):
             super().__init__(x,y,8,8,5,walls_list)#mettre les valeur manuellement
             self.xspeed = 0.7
+            self.frame_count = 0
       
       def mouvement(self,player):
 
@@ -93,7 +94,14 @@ class Bat(gameobjects.Entity):
                   elif self.yspeed < 0:
                         self.yspeed += 0.25
       def draw(self,x,y):
-            pyxel.rect(x,y,self.length,self.height,1)
+            self.frame_count += 1
+            print(self.frame_count)
+            if self.frame_count <=20:
+                 pyxel.blt(x,y,1,0,24,8,8,0)
+            else:
+                 pyxel.blt(x,y,1,8,24,8,8,0)
+            if self.frame_count == 40:
+                 self.frame_count = 0
 
 class Whizard(gameobjects.Entity):
      
