@@ -124,8 +124,8 @@ def draw():
     for w  in range(len(room.walls_textures)):
         pyxel.blt(camera.xOnScreen(room.walls_textures[w][0]),camera.yOnScreen(room.walls_textures[w][1]),room.walls_textures[w][2],room.walls_textures[w][3],room.walls_textures[w][4],room.walls_textures[w][5],room.walls_textures[w][6])
 
-    for i in range (len(room.enemies_list)):
-        pyxel.rect(camera.xOnScreen(room.enemies_list[i].xpos),camera.yOnScreen(room.enemies_list[i].ypos),room.enemies_list[i].length,room.enemies_list[i].height,2)
+    for i in room.enemies_list:
+        i.draw(camera.xOnScreen(i.xpos),camera.yOnScreen(i.ypos))
         
     for w  in room.walls_hitboxes:
         pyxel.blt(camera.xOnScreen(w.xpos),camera.yOnScreen(w.ypos),0,8,0,8,8)
