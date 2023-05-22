@@ -111,18 +111,18 @@ class Whizard(gameobjects.Entity):
      def __init__(self, x, y, wall_list, speedx = 0, speedy =0):
           super().__init__(x,y,8,8,5, wall_list)#mettre les valeur manuellement
           self.xspeed = 0.7
-          facing_player = False
-          edge_right = False
-          edge_left = False
-          blindness_time = 0 
+          self.facing_player = False
+          self.edge_right = False
+          self.edge_left = False
+          self.blindness_time = 0 
 
      def mouvement(self,player):      
             if (player.xpos - self.xpos)**2 + (player.ypos - self.ypos)**2 <= 2304:
-               facing_player = True 
+               self.facing_player = True 
 
-            if facing_player == True and self.xpos > player.xpos:
+            if self.facing_player == True and self.xpos > player.xpos:
                   self.xspeed += 0.01
-            elif facing_player == True and self.xpos < player.xpos:
+            elif self.facing_player == True and self.xpos < player.xpos:
                   self.xspeed -= 0.01
             
             else:
