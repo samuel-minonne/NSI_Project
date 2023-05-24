@@ -1,152 +1,167 @@
 import pyxel
 import hitboxes
 import gameobjects
-import enemies
-import json
+import math
 
-#Samuel todo list: make it so that the attack only does dmg, not 10xdmg and fix the dash bug with the new collisions
-#make it so that the corretions applies the the closest edge of the hitbox we are touching # Doesn't work in all cases, gonna have to find something else(probably speed related)
-#ne deplacer la camera que si on depasse une certaine coordonne pour eviter de bouger la cam avec des petits mouvements
+class Bug(gameobjects.Entity):
+   def __init__(self,x,y,walls_list,speedx = 0,speedy = 0,facing_right = True):
+      super().__init__(x,y,8,8,5,walls_list)#mettre les valeur manuellement
+      self.xspeed = 0.5
+      self.is_Whizard = False
 
-with open("./config.json") as json_file:# more Marko wizardy to open and read a json file
-    config = dict(json.load(json_file))
-
-
-class Room:
-    """A room, runs the actual game"""
-    def __init__(self,filepath:str,playerx:int,playery:int,player_hp:int,player_upgrades:int,playerRight = True) -> None:
-        """Creates a Room"""
-        self.walls_hitboxes = [] #All the hitboxes of the walls
-        #self.walls_hitboxes.append(hitboxes.Hitbox(8,80,72,8))
-        #self.walls_hitboxes.append(hitboxes.Hitbox(48,72,9,8))
-        #self.walls_hitboxes.append(hitboxes.Hitbox(80,72,8,8))
-        #self.walls_hitboxes.append(hitboxes.Hitbox(8,64,8,8))
-        #self.walls_hitboxes.append(hitboxes.Hitbox(0,56,8,8))
-        #self.walls_hitboxes.append(hitboxes.Hitbox(32,64,8,8))
-        #self.walls_hitboxes.append(hitboxes.Hitbox(112,16,8,64))
-        #self.walls_hitboxes.append(hitboxes.Hitbox(32,104,48,8))
-
-        self.load_hitboxes(filepath)
-
-        self.walls_textures = []
-        self.load_textures(filepath)
-        
-        self.enemies_list=[]
-        self.enemies_list.append(enemies.Bug(160,80,self.walls_hitboxes))
-        self.enemies_list.append(enemies.Bug(0,144,self.walls_hitboxes))
-        self.enemies_list.append(enemies.Bug(200,64,self.walls_hitboxes))
-        self.enemies_list.append(enemies.Bug(680,64,self.walls_hitboxes))
-        self.enemies_list.append(enemies.Bug(440,-176,self.walls_hitboxes))
-        self.enemies_list.append(enemies.Bat(120,8,self.walls_hitboxes))
-        self.enemies_list.append(enemies.Bat(156,-56,self.walls_hitboxes))
-        self.enemies_list.append(enemies.Bat(415,32,self.walls_hitboxes))
-        #self.enemies_list.append(enemies.Whizard(16,16,self.walls_hitboxes))
+   def update(self):
+      """
+      Updates the entity (position, hp,...). MUST be executed once per frame.
+      """
+      if self.yspeed < 1:
+         self.yspeed = self.yspeed + 0.05
+         
+      
+      self.touches_up = False
+      self.touches_down = False
+      self.touches_left = False
+      self.touches_right = False
+      self.edge_left = False
+      self.edge_right = False
+      for hb in self.walls_list:
+         collision_status = hitboxes.doHitboxesTouch(self.hitbox,hb)
+         if collision_status == ['y','-']:
+               self.touches_down = True
+         elif collision_status == ['x','+']:
+               self.touches_right = True
+         elif collision_status == ['x','-']:
+               self.touches_left = True
+         elif collision_status == ['y','+']:
+               self.touches_up = True
+         if not hb.is_point_in(self.xpos-1,self.ypos+self.height) and hb.is_point_in(self.xpos,self.ypos+self.height):
+            self.edge_left = True
+         if not hb.is_point_in(self.xpos+self.length+1,self.ypos+self.height) and hb.is_point_in(self.xpos+self.length,self.ypos+self.height):
+            self.edge_right = True
+      
 
 
-        self.items_list = []
-        #self.items_list.append(gameobjects.Item(16,16,"dash",0))
-        self.load_items(filepath)
-        
-        self.player = gameobjects.Player(playerx,playery,self.walls_hitboxes,self.items_list,player_hp,player_upgrades,playerRight)#The player
-    
-    def load_hitboxes(self,filepath:str):
-        '''Creates the hitboxes from a room file'''
-        with open(filepath) as json_file:
-            file = dict(json.load(json_file))
-        hitboxes_list = file['hitboxes']
-        for l in hitboxes_list:
-            self.walls_hitboxes.append(hitboxes.Hitbox(*l))
+      if self.xspeed > 0: #si on va vers la droite
+         if self.touches_right or self.edge_right: #et qu'on touche ou que y'a du vide à droite on tourne 
+               self.xspeed = -self.xspeed
+         else:
+               self.xpos += self.xspeed #sinon (si on touche pas) on se déplace de xspeed
+      elif self.xspeed < 0:
+         if self.touches_left or self.edge_left:#même chose pour la gauche
+               self.xspeed = -self.xspeed
+         else:
+               self.xpos += self.xspeed
+      if self.yspeed > 0: #mouvement sur l'axe y
+         if self.touches_down:
+               self.yspeed = 0
+         else:
+               self.ypos += self.yspeed
+      elif self.yspeed < 0:
+         if self.touches_up:
+               self.yspeed = 0
+         else:
+               self.ypos += self.yspeed
 
-    def load_textures(self,filepath:str):
-        """Creates the textures with the room file"""
-        with open(filepath) as json_file:
-            file = dict(json.load(json_file))
-        textures = file["textures"]
-        for i in range(len(textures)):
-            for j in range(textures[i][4]):
-                self.walls_textures.append([textures[i][0],textures[i][1],0,textures[i][2]*8%256,textures[i][2]*8//255*8,8*self.rotid_to_fw(textures[i][3]),8*self.rotid_to_fh(textures[i][3])])
-                textures[i][0] += 8
 
-    def load_items(self,filepath:str):
-        '''Creates the items from a room file'''
-        with open(filepath) as json_file:
-            file = dict(json.load(json_file))
-        items = file['items']
-        for i in items:
-            self.items_list.append(gameobjects.Item(*i))
+      self.hitbox.moveTo(round(self.xpos),round(self.ypos))
 
-    def rotid_to_fw(rotid,arg2):
-        if rotid == 0:
-            fw = -1
+   def mouvement(self,player):
+     print("ye")
+
+   def draw(self,x,y):
+        if self.xspeed > 0:
+            pyxel.blt(x,y,1,16,24,8,8,0)
         else:
-            fw = 1
-        return fw
-
-    def rotid_to_fh(rotid,arg2):
-        if rotid == 0:
-            fh = -1
-        else:
-            fh = 1
-        return fh
+             pyxel.blt(x,y,1,16,24,-8,8,0)
         
-        
-room = Room("./tutorial.json",0,0,50,[True,True,True])
-camera = gameobjects.Camera()
-pyxel.init(config["game"]["width"], config["game"]["height"], title="Protoknight", fps= 60, display_scale=5)
-pyxel.load("res.pyxres")
 
+class Bat(gameobjects.Entity):
+      
+      def __init__(self, x, y, walls_list, speedx = 0, speedy = 0, facing_right = True):
+            super().__init__(x,y,8,8,5,walls_list)#mettre les valeur manuellement
+            self.xspeed = 0.7
+            self.frame_count = 0
+            self.is_Whizard = False
+      
+      def mouvement(self,player):
 
-def update():
-    room.player.movement()
-    room.player.update()
-    room.player.combat(room.enemies_list)
-    camera.focusOn(room.player.xpos+4,room.player.ypos+4)
-    #print(room.player.xpos)
-    if len(room.enemies_list)>0:
-        print(room.enemies_list[0].hp)
-    else:
-        print("he's dead")
+            if (player.xpos - self.xpos)**2 + (player.ypos - self.ypos)**2 <= 2304:
+                  angle_to_player = math.atan2(self.ypos-player.ypos,self.xpos-player.xpos)
+                  self.setSpeedWithAngle(angle_to_player,-0.5)  
 
-    print(room.player.upgrades)
+            else:
+                  if self.xspeed > 0:
+                        self.xspeed -= 0.25
+                  elif self.xspeed < 0:
+                        self.xspeed += 0.25
 
-    for e in room.enemies_list:
-        if e.hp > 0:
-            e.update()
-            e.mouvement(room.player)
-        else:
-            room.enemies_list.remove(e)
-    
-    if room.player.ypos > 250:
-        room.player.hp = 0
+                  if self.yspeed > 0:
+                        self.yspeed -= 0.25
+                  elif self.yspeed < 0:
+                        self.yspeed += 0.25
 
-    room.items_list = room.player.items_list
+      def draw(self,x,y):
+            self.frame_count += 1
+            print(self.frame_count)
+            if self.frame_count <=20:
+                 pyxel.blt(x,y,1,0,24,8,8,0)
+            else:
+                 pyxel.blt(x,y,1,8,24,8,8,0)
+            if self.frame_count == 40:
+                 self.frame_count = 0
 
-def draw():
-    pyxel.cls(0)
+class Whizard(gameobjects.Entity):
+     
+     def __init__(self, x, y, wall_list, speedx = 0, speedy =0):
+          super().__init__(x,y,8,8,5, wall_list)#mettre les valeur manuellement
+          self.xspeed = 0.7
+          self.facing_player = False
+          self.edge_right = False
+          self.edge_left = False
+          self.touches_down = True
+          self.blindness_time = 0 
+          self.is_Whizard = True
 
-    pyxel.text(config["game"]["width"]/10,config["game"]["height"]/10, "lives:",7)
-    pyxel.text(config["game"]["width"]/10 + 25,config["game"]["height"]/10 , format(room.player.hp),7)
-    pyxel.text(config["game"]["width"]/10,config["game"]["height"]/10+10, "coins:",7)
-    pyxel.text(config["game"]["width"]/10 + 25,config["game"]["height"]/10+10 , format(room.player.coins),7)
-    
-    for i in range (len(room.walls_hitboxes)):
-        pyxel.rect(camera.xOnScreen(room.walls_hitboxes[i].xpos),camera.yOnScreen(room.walls_hitboxes[i].ypos),room.walls_hitboxes[i].length,room.walls_hitboxes[i].height,4)
+     def mouvement(self,player):      
+            if (player.xpos - self.xpos)**2 + (player.ypos - self.ypos)**2 <= 2304:
+               self.facing_player = True 
 
-    for w  in range(len(room.walls_textures)):
-        pyxel.blt(camera.xOnScreen(room.walls_textures[w][0]),camera.yOnScreen(room.walls_textures[w][1]),room.walls_textures[w][2],room.walls_textures[w][3],room.walls_textures[w][4],room.walls_textures[w][5],room.walls_textures[w][6])
+            if self.facing_player == True and self.xpos > player.xpos:
+                  self.xspeed -= 0.01
+            elif self.facing_player == True and self.xpos < player.xpos:
+                  self.xspeed += 0.01
 
-    for i in range (len(room.enemies_list)):
-        pyxel.rect(camera.xOnScreen(room.enemies_list[i].xpos),camera.yOnScreen(room.enemies_list[i].ypos),room.enemies_list[i].length,room.enemies_list[i].height,2)
-        
-    for i in room.items_list:
-        i.draw(camera.xOnScreen(i.xpos),camera.yOnScreen(i.ypos))
-    
-    room.player.draw(camera.xOnScreen(room.player.xpos),camera.yOnScreen(room.player.ypos))
+            for hb in self.walls_list:
+                   collision_status = hitboxes.doHitboxesTouch(self.hitbox,hb)
+                   if collision_status == ['y','-']:
+                         self.touches_down = True
+                   #elif collision_status == ['x','+']:
+                   #     self.touches_right = True
+                   #elif collision_status == ['x','-']:
+                   #     self.touches_left = True
+                   #elif collision_status == ['y','+']:
+                   #     self.touches_up = True
+                   if not hb.is_point_in(self.xpos-1,self.ypos+self.height) and hb.is_point_in(self.xpos,self.ypos+self.height):
+                         self.edge_left = True
+                   if not hb.is_point_in(self.xpos+self.length+1,self.ypos+self.height) and hb.is_point_in(self.xpos+self.length,self.ypos+self.height):
+                         self.edge_right = True
 
-        
-    if room.player.hp <= 0:
-        pyxel.cls(0)
-        pyxel.text(config["game"]["width"]/2,config["game"]["height"]/2 ,"GAME OVER",7)
-        pyxel.text(config["game"]["width"]/2,config["game"]["height"]/3 ,"you died",7)
-    
-pyxel.run(update, draw)
+                  
+            if self.edge_left == True or self.edge_right == True:
+                 self.xspeed = -self.xspeed
+            if self.touches_down == False:
+                 self.ypos = self.ypos+1
+            if self.edge_left == True or self.edge_right == True:
+                 self.xpos = -self.xpos
+
+            #if self.xpos >= player.xpos + 8 and player.iframes <= 0:
+            #     player.hp = player.hp -2
+            #elif self.xpos <= player.xpos - 8 and player.iframes <= 0:
+            #     player.hp = player.hp -2
+            #elif self.xpos == player.xpos:
+            #     player.xpos = player.xpos - 16
+                 
+
+            
+     def draw(self,x,y):
+            pyxel.rect(x,y,self.length,self.height,)
+
