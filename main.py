@@ -48,8 +48,9 @@ class Room:
             file = dict(json.load(json_file))
         textures = file["textures"]
         for i in range(len(textures)):
-            self.walls_textures.append([textures[i][0],textures[i][1],0,textures[i][2]*8,textures[i][2]//256,8*self.rotid_to_fw(textures[i][3]),8*self.rotid_to_fh(textures[i][3])])
-
+            for j in range(textures[i][4]):
+                self.walls_textures.append([textures[i][0],textures[i][1],0,textures[i][2]*8%256,textures[i][2]*8//255*8,8*self.rotid_to_fw(textures[i][3]),8*self.rotid_to_fh(textures[i][3])])
+                textures[i][0] += 8
     def load_items(self,filepath:str):
         '''Creates the items from a room file'''
         with open(filepath) as json_file:
