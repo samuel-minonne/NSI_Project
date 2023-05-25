@@ -132,5 +132,7 @@ def draw():
         pyxel.cls(0)
         pyxel.text(config["game"]["width"]/2,config["game"]["height"]/2 ,"GAME OVER",7)
         pyxel.text(config["game"]["width"]/2,config["game"]["height"]/3 ,"you died",7)
-    
+        
+        
+pyxel.playm(1,loop=True)
 pyxel.run(update, draw)
