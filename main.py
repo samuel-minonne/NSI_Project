@@ -91,7 +91,7 @@ class Room:
         return fh
         
         
-room = Room("./tutorial.json",0,0,5,[True,True,True])
+room = Room("./tutorial.json",0,0,5,[False,False,False])
 camera = gameobjects.Camera()
 pyxel.init(config["game"]["width"], config["game"]["height"], title="The music will drive you mad", fps= 60, display_scale=5)
 pyxel.load("res.pyxres")
@@ -150,6 +150,11 @@ def draw():
         pyxel.cls(0)
         pyxel.text(config["game"]["width"]/2,config["game"]["height"]/2 ,"GAME OVER",7)
         pyxel.text(config["game"]["width"]/2,config["game"]["height"]/3 ,"you died",7)
+
+    if room.player.is_game_over:
+        pyxel.cls(0)
+        pyxel.text(config["game"]["width"]/2,config["game"]["height"]/2,"you won",7)
+        pyxel.text(config["game"]["width"]/2,config["game"]["height"]/2+8,'coins :' + str(room.player.coins),7)
     
 pyxel.playm(1,loop=True)
 pyxel.run(update, draw)
