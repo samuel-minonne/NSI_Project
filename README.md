@@ -5,10 +5,6 @@ make a retro type game in python using pyxel</br>
 </br>
 
 To-do list:</br>
-    - si possible ajouter la fonction permettant de charger le dessin entier d'un niveau (Valentin)</br>
-    - relier le système d'ids au reste du code (Valentin)</br>
-    - faire different types d'enemis (Elisa)</br>
-    - implement the new collisions system (Samuel)</br>
     - Ajouter des tests unitaires</br>
     - Find a title</br>
     </br>
@@ -28,8 +24,6 @@ Some upgrades/abilities:</br>
     - Dash</br>
     - Walljump</br>
     - Doublejump</br>
-    - Ranged attack</br>
-    - Weapon upgrades</br>
 </br>
 
 A combat system:</br>
@@ -40,16 +34,16 @@ A combat system:</br>
 
 
 Level loading system:</br>
-    - Takes a list (texture of the room) of lists (rows) of tuples (textures of the objects)</br>
-    - each tuple has 2 ints, one is the number of the texture loaded and the other the rotation</br>
-    - another list for the hitboxes of the walls (a list of list of 4 values, xpos, ypos, length and height of the hitbox</br>
+    - Uses two lists containing lists, one for the hitboxes one for the textures (in tutorial.json)</br>
+    - the list for the textures contains lists containing these infos:(x,y,page on the spritesheet,x in spritesheet,y in spritesheet,width copied, length copied, the color that doesn't show)</br>
+    - the list for the hitboxes of the walls is a list of list of 4 values, xpos, ypos, length and height of the hitbox</br>
     - a way to load enemies</br>
 </br>
 
 Some enemies:</br>
     - basic one that just walks until an edege or a wall and turns around</br>
-    - more complex ones (runs towards/attacks the player on sight)</br>
-    - a flying one?</br>
+    - a wizzard</br>
+    - a flying one</br>
     </br>
     
 Some bosses:</br>
@@ -57,8 +51,8 @@ Some bosses:</br>
     </br>
     
 Who does what:</br>
-    - Samuel, collisions and combat sythem</br>
-    - Valentin, textures and affichage de textures</br>
+    - Samuel, gameobjects, hitboxes and combat sythem, helping us folks</br>
+    - Valentin, textures designing, texture showing, animations, music</br>
     - Elisa, enemies and death animations</br>
     </br>
     
