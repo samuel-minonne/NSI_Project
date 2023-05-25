@@ -41,6 +41,7 @@ class Gameobject:
         self.height = h
         self.hitbox = hitboxes.Hitbox(self.xpos,self.ypos,self.length,self.height)
 
+
 class Entity(Gameobject):
     """
     A Gameobject that can move and has hp: inherits the properties of the Gameobject class, and adds a x and y speed and  move method"""
@@ -180,7 +181,7 @@ class Entity(Gameobject):
 
     def setSpeedWithAngle(self,angle,speed):
         """
-        Sets the xspeed and yspeed values based on a speed and an angle (in degrees)
+        Sets the xspeed and yspeed values based on a speed and an angle
         """
         self.xspeed = math.cos(angle)*speed
         self.yspeed = math.sin(angle)*speed
@@ -193,22 +194,45 @@ class Entity(Gameobject):
         self.xspeed += math.cos(angle)*speed
         self.yspeed += math.sin(angle)*speed
 
+    def getTotalSpeed(self):
+        """Returns the total speed of the entity (like with speed and angle)"""
+        return math.sqrt(self.xspeed**2+self.yspeed**2)
+
     def moveWithSpeed(self):
         """
         Moves the entity with its xspeed and yspeed
         """
-        
+
 class Item(Gameobject):
     """An item that can be picked up"""
-    def __init__(self, x, y, name:str, item:int):
+    def __init__(self, x, y, type:int, item = 0):
         """creates an item"""
         super().__init__(x, y, 5, 5)
-        self.name = name
+        self.type = type # 0:upgrade, 1:heal, 2:coin
         self.item = item # 0:dash 1:wallbounce 2:double jump
+        self.name = ""
+        if self.type == 0:
+            if self.item == 0:
+                self.name = "the dash"
+            elif self.item == 1:
+                self.name = "the walljump"
+            elif self.item == 2:
+                self.name = "the double jump"
+        elif self.type == 1:
+            self.name = "a heal"
+        elif self.type == 2:
+            self.name = "a coin"
+        elif self.type == 3:
+            self.name == 'The end'
 
     def draw(self,x,y):
         """Draws an item"""
-        pyxel.rect(x,y,self.length,self.height,15)
+        if self.type == 0 or self.type == 3:
+            pyxel.rect(x,y,self.length,self.height,15)
+        elif self.type == 1:
+            pyxel.rect(x,y,self.length,self.height,8)
+        elif self.type == 2:
+            pyxel.rect(x,y,self.length,self.height,10)
 
 class Attack(hitboxes.Hitbox):
     """An Attack, a child of the Hitbox class with a duration, a damage and a list of entities that have been hit"""
@@ -246,12 +270,14 @@ class Player(Entity):
     """
     A player: inherits the properties of the Entity class and adds way too much stuff (someone pls write a propper desciption)
     """
-    def __init__(self,x,y,walls_list,speedx = 0,speedy = 0,facing_right = True):
-        super().__init__(x,y,8,8,5,walls_list)#mettre les valeur manuellement
+    def __init__(self,x,y,walls_list,items_list,hp:int,upgrades_list:list,speedx = 0,speedy = 0,facing_right = True):
+        super().__init__(x,y,7,8,hp,walls_list)#mettre les valeur manuellement
         """Creates a Player with x and y as coordinates and l and h as length and height and a hitbox.
         """
         self.config = config["player"]
-        self.upgrades = [True,True,True,True,True] #a list of bool
+        self.upgrades = upgrades_list #a list of bool
+        self.coins = 0
+        #self.base_hp = 8
         
         self.facing_right = facing_right
         self.vertical_direction = 1 #0 is facing up, 1 horizontally and 2 is facing down 
@@ -263,10 +289,39 @@ class Player(Entity):
         self.dashing = False
         self.dash_timer = 0
         self.can_dash = True
+
+        self.items_list = items_list#the items on the ground
+
+        self.text_to_display = ''
+        self.text_timer = 0
+        self.frame_count = 0
+
+        self.is_game_over = False
     
     def movement(self):
         """Reads the imputs and chages the speed and movement status values accordingly"""
         
+        remove_item = None
+        for i in self.items_list:
+            if hitboxes.doHitboxesCollide(self.hitbox,i.hitbox): #si on touche un item
+                if i.type != 3:
+                    if i.type == 0:
+                        self.upgrades[i.item] = True #on peut maintenant utiliser cette upgrade
+                    elif i.type == 1:
+                        self.hp += 1
+                    elif i.type == 2:
+                        self.coins += 1
+                    remove_item = i
+                    self.text_to_display = "You've obtained "+i.name+"!"
+                    self.text_timer = 120
+                    print(self.text_to_display)
+                else:
+                    self.is_game_over = True
+                    
+        if remove_item != None:
+            self.items_list.remove(remove_item)
+        
+
         if pyxel.btn(pyxel.KEY_D) and not pyxel.btn(pyxel.KEY_Q):
             self.facing_right = True
         if pyxel.btn(pyxel.KEY_Q) and not pyxel.btn(pyxel.KEY_D):
@@ -290,50 +345,53 @@ class Player(Entity):
                 self.can_dash = True 
                 self.can_doublejump = True  
             #movement sur l'axe x
-            if pyxel.btn(pyxel.KEY_Q) and self.xspeed > -self.config["movement"]["max_speed"]:
+            if pyxel.btn(pyxel.KEY_Q) and self.xspeed > -self.config["movement"]["max_speed"] and not self.touches_left:
                 self.xspeed -= self.config["movement"]["speed_increment"]
             elif self.xspeed < 0: 
                 self.xspeed += self.config["movement"]["ground_drag"]
                 if self.xspeed > 0: #évite de dépasser 0
                     self.xspeed = 0
-            if pyxel.btn(pyxel.KEY_D) and self.xspeed < self.config["movement"]["max_speed"]:
+            if pyxel.btn(pyxel.KEY_D) and self.xspeed < self.config["movement"]["max_speed"] and not self.touches_right:
                 self.xspeed += self.config["movement"]["speed_increment"]
             elif self.xspeed > 0:
                 self.xspeed -= self.config["movement"]["ground_drag"]
                 if self.xspeed < 0: #évite de dépasser 0
                     self.xspeed = 0
             #movement sur l'axe y
-            if self.yspeed < self.config["movement"]["max_falling_speed"]:
+            if self.yspeed < self.config["movement"]["max_falling_speed"] and not self.touches_down:
                 self.yspeed += self.config["movement"]["gravity"]
                 if self.yspeed > self.config["movement"]["max_falling_speed"]:#pour éviter de dépasser la max falling speed
                     self.yspeed = self.config["movement"]["max_falling_speed"]
             
             #all the types of jumps
-            if pyxel.btn(pyxel.KEY_SPACE) and self.touches_down: #normal jumps
-                self.yspeed = -1   
-            elif self.touches_right and pyxel.btnp(pyxel.KEY_SPACE): #temporary stuff for the walljumps
-                self.yspeed = -1
+            if pyxel.btn(pyxel.KEY_SPACE) and self.touches_down and not self.touches_up: #normal jumps
+                self.yspeed = -self.config["movement"]["jump_force"]
+            elif self.upgrades[1] and self.touches_right and pyxel.btnp(pyxel.KEY_SPACE) and not self.touches_up: #temporary stuff for the walljumps
+                self.yspeed = -self.config["movement"]["jump_force"]
                 self.xspeed -= 1
-            elif self.touches_left and pyxel.btnp(pyxel.KEY_SPACE): #walls jumps the other way
-                self.yspeed = -1
+            elif self.upgrades[1] and self.touches_left and pyxel.btnp(pyxel.KEY_SPACE) and not self.touches_up: #walls jumps the other way
+                self.yspeed = -self.config["movement"]["jump_force"]
                 self.xspeed += 1
-            elif pyxel.btnp(pyxel.KEY_SPACE) and self.can_doublejump: #double jumps
-                self.yspeed = -1
+            elif self.upgrades[2] and pyxel.btnp(pyxel.KEY_SPACE) and self.can_doublejump and not self.touches_up: #double jumps
+                self.yspeed = -self.config["movement"]["jump_force"]
                 self.can_doublejump = False
             
-        if pyxel.btnp(pyxel.KEY_E) and self.can_dash: #temporary stuff for the dash
-            if self.facing_right:
+        if self.upgrades[0] and pyxel.btnp(pyxel.KEY_RIGHT) and self.can_dash: #temporary stuff for the dash
+            if self.facing_right and not self.touches_right:
                 self.yspeed = 0
                 self.xspeed = 2
                 self.can_dash = False
                 self.dashing = True
                 self.dash_timer = self.config["movement"]["dash_time"]
-            else:
+            elif not self.facing_right and not self.touches_left:
                 self.yspeed = 0
                 self.xspeed = -2
                 self.can_dash = False
                 self.dashing = True
                 self.dash_timer = self.config["movement"]["dash_time"]
+
+        
+        #if hitboxes.doHitboxesCollide(self.hitbox,
         
     def combat(self, enemies_list:list):
         """very temporary"""
@@ -357,28 +415,28 @@ class Player(Entity):
             self.attack.moveTo(round(self.xpos),round(self.ypos))
             if self.attack.timer < 0:
                 self.attacking = False
-                
+
         for e in enemies_list:
             if hitboxes.doHitboxesCollide(e.hitbox,self.hitbox) and self.iframes<=0:
                 self.hp -= 1
                 self.iframes = 60 
-        
+
         self.iframes -= 1
-                
+
     def draw(self,x,y):
         """Draws the player at x and y coordinates. x and y are the top left corner of the player"""
         
         if self.dashing and not self.facing_right:
             pyxel.blt(x,y,1,56,0,8,8,colkey=0)
-        if self.dashing and self.facing_right:
+        elif self.dashing and self.facing_right:
             pyxel.blt(x,y,1,56,0,-8,8,colkey=0)
-        if self.yspeed < 0 and not self.facing_right:
+        elif self.yspeed < 0 and not self.facing_right:
             pyxel.blt(x,y,1,48,0,8,8,colkey=0)
-        if self.yspeed < 0 and self.facing_right:
+        elif self.yspeed < 0 and self.facing_right:
             pyxel.blt(x,y,1,48,0,-8,8,colkey=0)
-        if pyxel.btnp(pyxel.KEY_Q) and self.touches_down:
+        elif pyxel.btnp(pyxel.KEY_Q) and self.touches_down:
             self.frame_count = 0
-        if pyxel.btn(pyxel.KEY_Q) and self.touches_down:
+        elif pyxel.btn(pyxel.KEY_Q) and self.touches_down:
             self.frame_count += 1
             if self.frame_count <= 7:
                 pyxel.blt(x,y,1,32,0,8,8,colkey=0)
@@ -391,9 +449,9 @@ class Player(Entity):
             elif self.frame_count == 30:
                 pyxel.blt(x,y,1,24,0,8,8,colkey=0)
                 self.frame_count = 0
-        if pyxel.btnp(pyxel.KEY_D) and self.touches_down:
+        elif pyxel.btnp(pyxel.KEY_D) and self.touches_down:
             self.frame_count = 0
-        if pyxel.btn(pyxel.KEY_D) and self.touches_down:
+        elif pyxel.btn(pyxel.KEY_D) and self.touches_down:
             self.frame_count += 1
             if self.frame_count <= 7:
                 pyxel.blt(x,y,1,32,0,-8,8,colkey=0)
@@ -406,59 +464,52 @@ class Player(Entity):
             elif self.frame_count == 30:
                 pyxel.blt(x,y,1,24,0,-8,8,colkey=0)
                 self.frame_count = 0
-        if not self.touches_down and not self.facing_right and self.yspeed > 0:
+        elif not self.touches_down and not self.facing_right and self.yspeed > 0:
             pyxel.blt(x,y,1,64,0,8,8,colkey=0)
-        if  self.facing_right and not self.touches_down and self.yspeed > 0:
+        elif  self.facing_right and not self.touches_down and self.yspeed > 0:
             pyxel.blt(x,y,1,64,0,-8,8,colkey=0)
-        if self.hp <= 0:
+        elif self.hp <= 0:
             pyxel.blt(x,y,1,0,0,8,8,colkey=0)
-        if self.xspeed == 0 and self.yspeed == 0 and not self.facing_right:
+        elif self.xspeed == 0 and self.yspeed == 0 and not self.facing_right:
             pyxel.blt(x,y,1,24,0,8,8,colkey=0)
-        if self.xspeed == 0 and self.yspeed == 0 and self.facing_right :
+        elif self.xspeed == 0 and self.yspeed == 0 and self.facing_right :
             pyxel.blt(x,y,1,24,0,-8,8,colkey=0)
         if self.attacking and self.vertical_direction == 0 and not self.facing_right:
-             if self.attack.timer <= 8:
-                  pyxel.blt(x,y-8,1,24,8,-8,8,colkey=0)
-             if self.attack.timer > 2:
-                  pyxel.blt(x,y-8,1,32,8,-8,8,colkey=0)
-             if self.attack.timer <= 2:
-                  pyxel.blt(x,y-8,1,40,8,-8,8,colkey=0)
-         elif self.attacking and self.vertical_direction == 0 and self.facing_right:
-             if self.attack.timer <= 8:
-                  pyxel.blt(x,y-8,1,24,8,8,8,colkey=0)
-             if self.attack.timer > 2:
-                  pyxel.blt(x,y-8,1,32,8,8,8,colkey=0)
-             if self.attack.timer <= 2:
-                  pyxel.blt(x,y-8,1,40,8,8,8,colkey=0)
-        if self.attacking and self.facing_right:
+            if self.attack.timer <= 8:
+                pyxel.blt(x,y-8,1,24,8,-8,8,colkey=0)
+            if self.attack.timer > 2:
+                pyxel.blt(x,y-8,1,32,8,-8,8,colkey=0)
+            if self.attack.timer <= 2:
+                pyxel.blt(x,y-8,1,40,8,-8,8,colkey=0)
+        elif self.attacking and self.vertical_direction == 0 and self.facing_right:
+            if self.attack.timer <= 8:
+                pyxel.blt(x,y-8,1,24,8,8,8,colkey=0)
+            if self.attack.timer > 2:
+                pyxel.blt(x,y-8,1,32,8,8,8,colkey=0)
+            if self.attack.timer <= 2:
+                pyxel.blt(x,y-8,1,40,8,8,8,colkey=0)
+        elif self.attacking and self.facing_right:
             if self.attack.timer >= 8:
                 pyxel.blt(x+6,y,1,0,8,8,8,colkey=0)
             if self.attack.timer > 2 and self.attack.timer < 8:
                 pyxel.blt(x+6,y,1,8,8,8,8,colkey=0)
             if self.attack.timer <= 2:
                 pyxel.blt(x+6,y,1,16,8,8,8,colkey=0)
-        if self.attacking and not self.facing_right:
-            if self.attack.timer <= 8:
-                pyxel.blt(x-8,y+1,1,0,8,-8,8,colkey=0)
-            if self.attack.timer > 2:
-                pyxel.blt(x-8,y+1,1,8,8,-8,8,colkey=0)
-            if self.attack.timer <= 2:
-                pyxel.blt(x-8,y+1,1,16,8,-8,8,colkey=0)
-        if self.attacking and self.facing_right:
+        elif self.attacking and not self.facing_right:
             if self.attack.timer >= 8:
-                pyxel.blt(x+6,y,1,0,8,8,8,colkey=0)
-            if self.attack.timer > 2 and self.attack.timer < 8:
-                pyxel.blt(x+6,y,1,8,8,8,8,colkey=0)
-            if self.attack.timer <= 2:
-                pyxel.blt(x+6,y,1,16,8,8,8,colkey=0)
-        if self.attacking and not self.facing_right:
-            if self.attack.timer <= 8:
                 pyxel.blt(x-8,y+1,1,0,8,-8,8,colkey=0)
-            if self.attack.timer > 2:
+            if self.attack.timer > 2 and self.attack.timer < 8:
                 pyxel.blt(x-8,y+1,1,8,8,-8,8,colkey=0)
             if self.attack.timer <= 2:
                 pyxel.blt(x-8,y+1,1,16,8,-8,8,colkey=0)
-           
+
+
+        if self.text_timer > 0:
+            pyxel.text(10,180,self.text_to_display,7)
+            self.text_timer -= 1
+            print("we displaying")
+
+                
 class Camera():
     """A class that handles the movement of the camera. xoffset and yoffset are the values by which we offset the drawings on the screen"""
     def __init__(self,xoffset = 0, yoffset = 0):
