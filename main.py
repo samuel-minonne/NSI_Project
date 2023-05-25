@@ -43,6 +43,7 @@ class Room:
         #self.enemies_list.append(enemies.Whizard(16,16,self.walls_hitboxes))
 
 
+
         self.items_list = []
         #self.items_list.append(gameobjects.Item(16,16,"dash",0))
         self.load_items(filepath)
@@ -92,7 +93,7 @@ class Room:
         
 room = Room("./tutorial.json",0,0,5,[True,True,True])
 camera = gameobjects.Camera()
-pyxel.init(config["game"]["width"], config["game"]["height"], title="Protoknight", fps= 60, display_scale=5)
+pyxel.init(config["game"]["width"], config["game"]["height"], title="The music will drive you mad", fps= 60, display_scale=5)
 pyxel.load("res.pyxres")
 
 
