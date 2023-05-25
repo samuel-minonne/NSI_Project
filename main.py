@@ -14,14 +14,22 @@ with open("./config.json") as json_file:# more Marko wizardy to open and read a 
 
 class Room:
     """A room, runs the actual game"""
-    def __init__(self) -> None:
+    def __init__(self,filepath:str,playerx:int,playery:int,player_hp:int,player_upgrades:int,playerRight = True) -> None:
         """Creates a Room"""
         self.walls_hitboxes = [] #All the hitboxes of the walls
+        #self.walls_hitboxes.append(hitboxes.Hitbox(8,80,72,8))
+        #self.walls_hitboxes.append(hitboxes.Hitbox(48,72,9,8))
+        #self.walls_hitboxes.append(hitboxes.Hitbox(80,72,8,8))
+        #self.walls_hitboxes.append(hitboxes.Hitbox(8,64,8,8))
+        #self.walls_hitboxes.append(hitboxes.Hitbox(0,56,8,8))
+        #self.walls_hitboxes.append(hitboxes.Hitbox(32,64,8,8))
+        #self.walls_hitboxes.append(hitboxes.Hitbox(112,16,8,64))
+        #self.walls_hitboxes.append(hitboxes.Hitbox(32,104,48,8))
 
-        self.load_hitboxes("./room1.json")
+        self.load_hitboxes(filepath)
 
         self.walls_textures = []
-        self.load_textures("./room1.json")
+        self.load_textures(filepath)
         
         self.enemies_list=[]
         self.enemies_list.append(enemies.Bug(5,8,self.walls_hitboxes))
@@ -30,9 +38,9 @@ class Room:
 
         self.items_list = []
         #self.items_list.append(gameobjects.Item(16,16,"dash",0))
-        self.load_items("./testroom.json")
+        self.load_items(filepath)
         
-        self.player = gameobjects.Player(0,-50,self.walls_hitboxes,self.items_list)#The player
+        self.player = gameobjects.Player(playerx,playery,self.walls_hitboxes,self.items_list,player_hp,player_upgrades,playerRight)#The player
     
     def load_hitboxes(self,filepath:str):
         '''Creates the hitboxes from a room file'''
@@ -51,6 +59,7 @@ class Room:
             for j in range(textures[i][4]):
                 self.walls_textures.append([textures[i][0],textures[i][1],0,textures[i][2]*8%256,textures[i][2]*8//255*8,8*self.rotid_to_fw(textures[i][3]),8*self.rotid_to_fh(textures[i][3])])
                 textures[i][0] += 8
+
     def load_items(self,filepath:str):
         '''Creates the items from a room file'''
         with open(filepath) as json_file:
@@ -74,7 +83,7 @@ class Room:
         return fh
         
         
-room = Room()
+room = Room("./tutorial.json",0,0,5,[True,True,True])
 camera = gameobjects.Camera()
 pyxel.init(config["game"]["width"], config["game"]["height"], title="Protoknight", fps= 60, display_scale=5)
 pyxel.load("res.pyxres")
@@ -103,12 +112,10 @@ def update():
     if room.player.ypos > 250:
         room.player.hp = 0
 
+    room.items_list = room.player.items_list
 
 def draw():
     pyxel.cls(0)
-
-    pyxel.text(config["game"]["width"]/10,config["game"]["height"]/10, "lives:",7)
-    pyxel.text(config["game"]["width"]/10 + 25,config["game"]["height"]/10 , format(room.player.hp),7)
 
     
     for i in range (len(room.walls_hitboxes)):
@@ -120,20 +127,21 @@ def draw():
     for i in room.enemies_list:
         i.draw(camera.xOnScreen(i.xpos),camera.yOnScreen(i.ypos))
         
-    for w  in room.walls_hitboxes:
-        pyxel.blt(camera.xOnScreen(w.xpos),camera.yOnScreen(w.ypos),0,8,0,8,8)
-
     for i in room.items_list:
         i.draw(camera.xOnScreen(i.xpos),camera.yOnScreen(i.ypos))
     
     room.player.draw(camera.xOnScreen(room.player.xpos),camera.yOnScreen(room.player.ypos))
 
+    pyxel.text(config["game"]["width"]/10,config["game"]["height"]/10, "lives:",7)
+    pyxel.text(config["game"]["width"]/10 + 25,config["game"]["height"]/10 , format(room.player.hp),7)
+    pyxel.text(config["game"]["width"]/10,config["game"]["height"]/10+10, "coins:",7)
+    pyxel.text(config["game"]["width"]/10 + 25,config["game"]["height"]/10+10 , format(room.player.coins),7)
+    
         
     if room.player.hp <= 0:
         pyxel.cls(0)
         pyxel.text(config["game"]["width"]/2,config["game"]["height"]/2 ,"GAME OVER",7)
         pyxel.text(config["game"]["width"]/2,config["game"]["height"]/3 ,"you died",7)
-        
-        
+    
 pyxel.playm(1,loop=True)
 pyxel.run(update, draw)
