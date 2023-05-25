@@ -32,8 +32,8 @@ class Room:
         self.load_textures(filepath)
         
         self.enemies_list=[]
-        self.enemies_list.append(enemies.Bug(5,8,self.walls_hitboxes))
-        self.enemies_list.append(enemies.Bat(32,16,self.walls_hitboxes))
+        self.enemies_list.append(enemies.Bug(144,80,self.walls_hitboxes))
+        self.enemies_list.append(enemies.Bat(532,64,self.walls_hitboxes))
 
 
         self.items_list = []
