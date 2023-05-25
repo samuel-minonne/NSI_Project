@@ -416,6 +416,20 @@ class Player(Entity):
             pyxel.blt(x,y,1,24,0,8,8,colkey=0)
         if self.xspeed == 0 and self.yspeed == 0 and self.facing_right :
             pyxel.blt(x,y,1,24,0,-8,8,colkey=0)
+        if self.attacking and self.vertical_direction == 0 and not self.facing_right:
+             if self.attack.timer <= 8:
+                  pyxel.blt(x,y-8,1,24,8,-8,8,colkey=0)
+             if self.attack.timer > 2:
+                  pyxel.blt(x,y-8,1,32,8,-8,8,colkey=0)
+             if self.attack.timer <= 2:
+                  pyxel.blt(x,y-8,1,40,8,-8,8,colkey=0)
+         elif self.attacking and self.vertical_direction == 0 and self.facing_right:
+             if self.attack.timer <= 8:
+                  pyxel.blt(x,y-8,1,24,8,8,8,colkey=0)
+             if self.attack.timer > 2:
+                  pyxel.blt(x,y-8,1,32,8,8,8,colkey=0)
+             if self.attack.timer <= 2:
+                  pyxel.blt(x,y-8,1,40,8,8,8,colkey=0)
         if self.attacking and self.facing_right:
             if self.attack.timer >= 8:
                 pyxel.blt(x+6,y,1,0,8,8,8,colkey=0)
